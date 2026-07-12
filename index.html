@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f7a5c">
+<meta name="description" content="מנטור אישי לירידה במשקל ואורח חיים בריא — מסע של שנה, יעד של 40 ק״ג. תכנית, מעקב, ותמיכה יומית.">
+<title>המנטור שלי · מסע לאיזון</title>
+<style>
+/* ========================================================================
+   המנטור שלי — Design System
+   מטרה: כלי יומיומי, חם ומכיל, לירידה של 40 ק״ג לאורך שנה.
+   שפה: עברית (RTL). מובייל-פירסט. כל הנתונים נשמרים מקומית בדפדפן.
+   ======================================================================== */
+:root{
+  --bg:#f4f7f5;
+  --bg-soft:#eaf1ec;
+  --card:#ffffff;
+  --ink:#152a22;
+  --ink-soft:#4a6157;
+  --muted:#87998f;
+  --line:#e0e8e2;
+  --brand:#0f7a5c;
+  --brand-600:#0c684e;
+  --brand-100:#d9efe6;
+  --accent:#e8823a;
+  --accent-100:#fbe7d6;
+  --good:#2fa06b;
+  --warn:#e0a13b;
+  --bad:#d1584f;
+  --gold:#caa54a;
+  --shadow:0 6px 22px rgba(19,42,34,.08);
+  --shadow-lg:0 14px 40px rgba(19,42,34,.16);
+  --r:20px;
+  --r-sm:13px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Assistant","Heebo",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  line-height:1.55;font-size:16px;
+  overscroll-behavior-y:none;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:16px}
+a{color:var(--brand);text-decoration:none}
+.app{max-width:520px;margin:0 auto;min-height:100%;position:relative;padding-bottom:calc(84px + var(--safe-b))}
+
+/* ---------- Header ---------- */
+.top{
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(180deg,var(--bg) 70%,rgba(244,247,245,0));
+  padding:14px 18px 8px;
+}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .logo{
+  width:38px;height:38px;border-radius:12px;flex:0 0 auto;
+  background:linear-gradient(140deg,var(--brand),#16a377);
+  display:grid;place-items:center;color:#fff;font-size:20px;
+  box-shadow:0 4px 12px rgba(15,122,92,.35);
+}
+.brand h1{font-size:17px;font-weight:800;letter-spacing:-.2px}
+.brand .sub{font-size:11.5px;color:var(--muted);font-weight:600}
+.chip-day{
+  background:var(--brand-100);color:var(--brand-600);
+  font-weight:800;font-size:12px;padding:7px 11px;border-radius:999px;white-space:nowrap;
+}
+
+/* ---------- Generic ---------- */
+.view{padding:6px 16px 20px;animation:rise .32s ease}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{
+  background:var(--card);border-radius:var(--r);padding:18px;
+  box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:14px;
+}
+.card.tight{padding:14px}
+.card h2{font-size:16px;font-weight:800;margin-bottom:4px}
+.section-title{font-size:13px;font-weight:800;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.6px;margin:20px 4px 10px}
+.row{display:flex;gap:10px}
+.row.wrap{flex-wrap:wrap}
+.grow{flex:1}
+.muted{color:var(--muted)}
+.soft{color:var(--ink-soft)}
+.center{text-align:center}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800;
+  padding:5px 10px;border-radius:999px;background:var(--bg-soft);color:var(--ink-soft)}
+.pill.brand{background:var(--brand-100);color:var(--brand-600)}
+.pill.accent{background:var(--accent-100);color:#b45b1e}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--brand);color:#fff;font-weight:800;font-size:15px;
+  padding:14px 18px;border-radius:14px;width:100%;
+  box-shadow:0 6px 16px rgba(15,122,92,.28);transition:transform .1s,filter .1s;
+}
+.btn:active{transform:translateY(1px) scale(.995);filter:brightness(.97)}
+.btn.ghost{background:var(--bg-soft);color:var(--ink);box-shadow:none}
+.btn.accent{background:var(--accent);box-shadow:0 6px 16px rgba(232,130,58,.3)}
+.btn.sm{width:auto;padding:10px 14px;font-size:13.5px;border-radius:11px}
+.btn.danger{background:#fbeae8;color:var(--bad);box-shadow:none}
+
+/* ---------- Forms ---------- */
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:800;font-size:13.5px;margin-bottom:7px}
+.field .hint{font-weight:600;color:var(--muted);font-size:12px;margin-bottom:7px}
+.input,select.input,textarea.input{
+  width:100%;background:var(--bg-soft);border:1.5px solid transparent;
+  border-radius:13px;padding:13px 14px;color:var(--ink);transition:border .15s,background .15s;
+}
+.input:focus{outline:none;border-color:var(--brand);background:#fff}
+textarea.input{resize:vertical;min-height:88px;line-height:1.6}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg button{
+  flex:1;min-width:calc(50% - 4px);background:var(--bg-soft);border:1.5px solid transparent;
+  border-radius:13px;padding:12px 8px;font-weight:700;font-size:13.5px;color:var(--ink-soft);
+  transition:all .15s;text-align:center;line-height:1.35;
+}
+.seg button small{display:block;font-weight:600;color:var(--muted);font-size:11px;margin-top:2px}
+.seg button.on{background:var(--brand-100);border-color:var(--brand);color:var(--brand-600)}
+.seg button.on small{color:var(--brand-600);opacity:.85}
+
+/* ---------- Progress ring & bars ---------- */
+.ring{--p:0;width:150px;height:150px;border-radius:50%;margin:2px auto 6px;
+  background:conic-gradient(var(--brand) calc(var(--p)*1%),var(--bg-soft) 0);
+  display:grid;place-items:center;position:relative;transition:background .6s ease}
+.ring::before{content:"";position:absolute;inset:13px;background:var(--card);border-radius:50%}
+.ring .in{position:relative;text-align:center}
+.ring .in b{font-size:30px;font-weight:900;letter-spacing:-1px}
+.ring .in span{font-size:12px;color:var(--muted);font-weight:700;display:block}
+.bar{height:10px;border-radius:999px;background:var(--bg-soft);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:999px;background:var(--brand);transition:width .5s ease}
+.bar.water>i{background:linear-gradient(90deg,#3aa0d8,#5bc0eb)}
+.bar.cal>i{background:linear-gradient(90deg,var(--accent),#f0a262)}
+
+/* ---------- Stat tiles ---------- */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;box-shadow:var(--shadow)}
+.tile b{font-size:24px;font-weight:900;letter-spacing:-.5px;display:block}
+.tile .lbl{font-size:12px;color:var(--muted);font-weight:700}
+.tile .delta{font-size:12px;font-weight:800}
+.delta.up{color:var(--good)}.delta.down{color:var(--bad)}
+
+/* ---------- Mentor / chat ---------- */
+.mentor-note{
+  background:linear-gradient(135deg,#0f7a5c,#12946f);color:#fff;border-radius:var(--r);
+  padding:18px;box-shadow:var(--shadow-lg);margin-bottom:14px;position:relative;overflow:hidden;
+}
+.mentor-note::after{content:"";position:absolute;left:-30px;bottom:-40px;width:150px;height:150px;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%)}
+.mentor-note .who{display:flex;align-items:center;gap:9px;margin-bottom:9px;font-weight:800;font-size:13px;opacity:.95}
+.mentor-note .who .av{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:17px}
+.mentor-note p{font-size:15.5px;font-weight:600;position:relative;z-index:1}
+.chat{display:flex;flex-direction:column;gap:10px;padding:4px 0 8px}
+.bubble{max-width:86%;padding:12px 15px;border-radius:17px;font-size:14.5px;line-height:1.55;white-space:pre-wrap}
+.bubble.me{align-self:flex-start;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
+.bubble.bot{align-self:flex-end;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px;box-shadow:var(--shadow)}
+.quick{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.quick button{white-space:nowrap;background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px;color:var(--ink-soft);box-shadow:var(--shadow)}
+.chatbar{display:flex;gap:8px;position:sticky;bottom:0;padding:8px 0;background:linear-gradient(0deg,var(--bg) 75%,transparent)}
+.chatbar input{flex:1;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:13px 15px}
+.chatbar input:focus{outline:none;border-color:var(--brand)}
+.chatbar button{width:50px;flex:0 0 auto;border-radius:14px;background:var(--brand);color:#fff;font-size:20px;font-weight:800}
+
+/* ---------- Habits / checklist ---------- */
+.habit{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.habit:last-child{border-bottom:none}
+.habit .box{width:28px;height:28px;flex:0 0 auto;border-radius:9px;border:2px solid var(--line);
+  display:grid;place-items:center;font-size:16px;color:transparent;transition:all .15s}
+.habit.done .box{background:var(--good);border-color:var(--good);color:#fff}
+.habit .t{flex:1;font-weight:700;font-size:14.5px}
+.habit.done .t{color:var(--muted);text-decoration:line-through}
+.habit .emo{font-size:19px}
+
+/* ---------- Journey / roadmap ---------- */
+.road{position:relative;padding-inline-start:6px}
+.milestone{display:flex;gap:14px;position:relative;padding-bottom:20px}
+.milestone::before{content:"";position:absolute;inset-inline-start:15px;top:30px;bottom:-4px;width:2px;background:var(--line)}
+.milestone:last-child::before{display:none}
+.milestone .dot{width:32px;height:32px;flex:0 0 auto;border-radius:50%;background:var(--bg-soft);
+  border:2px solid var(--line);display:grid;place-items:center;font-size:15px;font-weight:800;color:var(--muted);z-index:1}
+.milestone.done .dot{background:var(--good);border-color:var(--good);color:#fff}
+.milestone.now .dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 5px var(--accent-100)}
+.milestone .body{flex:1;padding-top:2px}
+.milestone .body h3{font-size:14.5px;font-weight:800}
+.milestone .body .kg{font-size:12.5px;font-weight:800;color:var(--brand-600)}
+.milestone .body p{font-size:13px;color:var(--ink-soft);margin-top:3px}
+
+/* ---------- Nutrition cards ---------- */
+.swap{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.swap:last-child{border-bottom:none}
+.swap .from{color:var(--bad);font-weight:700;flex:1}
+.swap .arw{color:var(--muted)}
+.swap .to{color:var(--good);font-weight:800;flex:1;text-align:start}
+.plate{display:flex;border-radius:16px;overflow:hidden;height:20px;margin:12px 0 6px}
+.plate>div{display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff}
+.acc{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:10px;overflow:hidden}
+.acc>summary{list-style:none;padding:14px 16px;font-weight:800;font-size:14.5px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:"+";color:var(--brand);font-size:20px;font-weight:700}
+.acc[open]>summary::after{content:"–"}
+.acc .inner{padding:0 16px 16px;font-size:14px;color:var(--ink-soft)}
+.acc .inner li{margin:6px 0;padding-inline-start:2px}
+.acc .inner ul{padding-inline-start:18px}
+
+/* ---------- Bottom nav ---------- */
+.nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:30;
+  max-width:520px;margin:0 auto;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:flex;padding:8px 6px calc(8px + var(--safe-b));
+}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:4px 2px;color:var(--muted);font-size:10.5px;font-weight:800;transition:color .15s}
+.nav button .ic{font-size:21px;transition:transform .15s}
+.nav button.on{color:var(--brand)}
+.nav button.on .ic{transform:translateY(-2px) scale(1.06)}
+
+/* ---------- Misc ---------- */
+.note-box{background:var(--accent-100);border-radius:var(--r-sm);padding:12px 14px;font-size:12.5px;color:#8a4a17;font-weight:600;display:flex;gap:8px}
+.hr{height:1px;background:var(--line);margin:14px 0;border:none}
+.toast{position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;font-size:14px;
+  box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all .3s;z-index:60;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+.badge-streak{display:inline-flex;align-items:center;gap:5px;background:var(--accent-100);color:#b45b1e;font-weight:900;padding:6px 12px;border-radius:999px;font-size:14px}
+
+/* onboarding hero */
+.hero{padding:26px 20px 10px;text-align:center}
+.hero .big-logo{width:74px;height:74px;border-radius:22px;margin:0 auto 16px;
+  background:linear-gradient(140deg,var(--brand),#16a377);display:grid;place-items:center;font-size:38px;
+  box-shadow:0 12px 30px rgba(15,122,92,.4)}
+.hero h1{font-size:25px;font-weight:900;letter-spacing:-.5px;line-height:1.25}
+.hero p{color:var(--ink-soft);margin-top:10px;font-size:15px}
+.steps{display:flex;gap:6px;justify-content:center;margin:18px 0}
+.steps i{width:26px;height:5px;border-radius:999px;background:var(--line)}
+.steps i.on{background:var(--brand);width:30px}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   State + persistence
+   ============================================================ */
+const KEY='mentor_state_v1';
+const todayISO=()=>new Date().toISOString().slice(0,10);
+const DAY=864e5;
+
+const DEFAULT={
+  onboarded:false,
+  profile:{name:'',sex:'female',age:35,height:165,startWeight:0,goalLoss:40,activity:1.375,startDate:todayISO()},
+  targets:{calories:0,water:8,carbs:25}, // carbs = פחמימות נטו ליום (קיטו)
+  training:{sets:3,reps:10,levels:{}}, // רמת כל תרגיל + סבבים/חזרות
+  weights:[],          // {date, kg}
+  ketones:[],          // {date, type:'blood'|'urine', value}
+  measures:[],         // {date, vals:{waist,hips,...}} בס״מ
+  reminders:{enabled:false, items:[
+    {id:'weigh', label:'שקילת בוקר', emoji:'⚖️', time:'07:30', on:true},
+    {id:'electro', label:'אלקטרוליטים — מלח/מגנזיום', emoji:'🧂', time:'09:00', on:true},
+    {id:'w1', label:'לשתות מים', emoji:'💧', time:'11:00', on:true},
+    {id:'w2', label:'לשתות מים', emoji:'💧', time:'15:00', on:true},
+    {id:'w3', label:'לשתות מים', emoji:'💧', time:'19:00', on:true},
+  ], fired:{date:'',ids:[]}},
+  days:{},             // date -> {habits:{}, water:int, mood:'', journal:''}
+  chat:[],             // {who:'me'|'bot', text, t}
+  streak:0, lastActive:''
+};
+
+let S=load();
+function load(){
+  try{const r=JSON.parse(localStorage.getItem(KEY));return r?{...structuredClone(DEFAULT),...r}:structuredClone(DEFAULT);}
+  catch(e){return structuredClone(DEFAULT);}
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));}
+function today(){
+  const d=todayISO();
+  if(!S.days[d])S.days[d]={habits:{},water:0,mood:'',journal:''};
+  return S.days[d];
+}
+
+/* ============================================================
+   Health math (Mifflin–St Jeor)  — כל היעדים בטווח בטוח
+   ============================================================ */
+function bmr(){
+  const p=S.profile, w=currentWeight(), h=p.height, a=p.age;
+  const base=10*w+6.25*h-5*a;
+  return Math.round(p.sex==='male'?base+5:base-161);
+}
+function tdee(){return Math.round(bmr()*S.profile.activity);}
+function calorieTarget(){
+  // גירעון בטוח ~500-750 קק"ל, אך לא מתחת לרצפה בריאה
+  const t=tdee();
+  let target=t-650;
+  const floor=S.profile.sex==='male'?1500:1200;
+  return Math.max(floor,Math.round(target/10)*10);
+}
+/* מאקרו קטוגני: פחמימות נטו נמוכות · חלבון מתון · שומן ממלא את השאר */
+function macros(){
+  const cals=S.targets.calories||calorieTarget();
+  const carb=S.targets.carbs||25;                              // גרם פחמימות נטו ליום
+  const prot=Math.max(80,Math.round(currentWeight()*1.2));     // חלבון מתון־משביע
+  const fat=Math.max(40,Math.round((cals-carb*4-prot*4)/9));   // שומן = שאר הקלוריות
+  const p=g=>Math.round(g/((carb*4+prot*4+fat*9))*100);
+  return {cals,carb,prot,fat,pct:{carb:p(carb*4),prot:p(prot*4),fat:p(fat*9)}};
+}
+function currentWeight(){
+  if(S.weights.length)return S.weights[S.weights.length-1].kg;
+  return S.profile.startWeight||80;
+}
+function goalWeight(){return +(S.profile.startWeight-S.profile.goalLoss).toFixed(1);}
+function lostKg(){return +(S.profile.startWeight-currentWeight()).toFixed(1);}
+function pctToGoal(){
+  const g=S.profile.goalLoss;if(g<=0)return 0;
+  return Math.max(0,Math.min(100,Math.round(lostKg()/g*100)));
+}
+function daysIn(){return Math.max(0,Math.floor((Date.parse(todayISO())-Date.parse(S.profile.startDate))/DAY));}
+function weeklyRate(){ // ק"ג לשבוע בפועל
+  if(S.weights.length<2)return 0;
+  const first=S.weights[0], last=S.weights[S.weights.length-1];
+  const wks=Math.max(1,(Date.parse(last.date)-Date.parse(first.date))/DAY/7);
+  return +((first.kg-last.kg)/wks).toFixed(2);
+}
+function etaText(){
+  const rate=weeklyRate();const remain=currentWeight()-goalWeight();
+  if(rate<=0.05||remain<=0)return null;
+  const wks=Math.ceil(remain/rate);
+  const d=new Date(Date.now()+wks*7*DAY);
+  return d.toLocaleDateString('he-IL',{month:'long',year:'numeric'});
+}
+
+/* streak */
+function touchStreak(){
+  const d=todayISO();
+  if(S.lastActive===d)return;
+  const y=new Date(Date.now()-DAY).toISOString().slice(0,10);
+  S.streak=(S.lastActive===y)?S.streak+1:1;
+  S.lastActive=d;save();
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+const $=(s,r=document)=>r.querySelector(s);
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2200);}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+/* ============================================================
+   HABITS + monthly roadmap content
+   ============================================================ */
+const HABITS=[
+  {id:'carbs',t:'מתחת ל־25 ג׳ פחמימות נטו',emo:'🥑'},
+  {id:'fat',t:'שומן בריא בכל ארוחה',emo:'🧈'},
+  {id:'protein',t:'חלבון במידה מתונה',emo:'🍳'},
+  {id:'electro',t:'אלקטרוליטים — מלח, מים, מגנזיום',emo:'🧂'},
+  {id:'water',t:'לשתות מים לאורך היום',emo:'💧'},
+  {id:'move',t:'תנועה — 20–30 דק׳',emo:'🚶'},
+  {id:'sleep',t:'שינה טובה בזמן',emo:'😴'},
+];
+const ROADMAP=[
+  {m:1,kg:3,title:'חודש 1 · כניסה לקטוזיס',p:'מורידים פחמימות מתחת ל־25 ג׳ נטו, מוסיפים שומן בריא ומקפידים על אלקטרוליטים. השבוע הראשון עלול להרגיש "שפעת קיטו" — זה חולף.'},
+  {m:2,kg:7,title:'חודש 2 · הסתגלות לשומן',p:'הגוף לומד לשרוף שומן כדלק. האנרגיה מתייצבת, התיאבון יורד, והצום בין הארוחות נעשה טבעי.'},
+  {m:3,kg:11,title:'חודש 3 · שליטה במאקרו',p:'מזהים פחמימות נסתרות, קוראים תוויות, ומכוונים במדויק שומן/חלבון/פחמימה. מוסיפים אימוני התנגדות.'},
+  {m:4,kg:15,title:'חודש 4 · ניהול טריגרים',p:'מזהים מתי בא לנו סוכר מסיבה רגשית, ובונים תגובה קטוגנית חלופית שמרגיעה בלי לצאת מקטוזיס.'},
+  {m:5,kg:19,title:'חודש 5 · קיטו בחיים החברתיים',p:'אוכלים נכון גם במסעדות ובאירועים — בוחרים חלבון+שומן+ירקות עליים, בלי להתפשר על ההנאה.'},
+  {m:6,kg:22,title:'חצי הדרך · חצי מהיעד 🎉',p:'עוצרים לחגוג. מודדים היקפים, מצלמים, ואולי מתחילים לשלב חלון אכילה (צום לסירוגין) לזירוז.'},
+  {m:7,kg:26,title:'חודש 7 · שבירת סטול',p:'מרעננים: בודקים פחמימות מסתננות, מכווננים חלבון, ומוסיפים תנועה או צום קצר לשבירת קיפאון.'},
+  {m:8,kg:30,title:'חודש 8 · חוסן נפשי',p:'עובדים על יחס סלחני לעצמנו — החלקה לפחמימה היא נתון, לא כישלון. חוזרים לקטוזיס בארוחה הבאה.'},
+  {m:9,kg:33,title:'חודש 9 · אנרגיה וכושר',p:'הגוף קליל ומסתגל־שומן. אנרגיה יציבה לאורך היום, ביצועים בכושר עולים.'},
+  {m:10,kg:36,title:'חודש 10 · שגרת קבע',p:'קיטו הפך לטבע שני. יודעים בעל־פה מה אוכלים, פחות מאמץ ויותר זרימה.'},
+  {m:11,kg:38,title:'חודש 11 · הישורת האחרונה',p:'מכוונים דיוק: אלקטרוליטים, שינה, איכות השומן, ותזמון הארוחה האחרונה.'},
+  {m:12,kg:40,title:'חודש 12 · היעד! −40 ק״ג',p:'לא סיימנו — התחלנו חיים חדשים. עוברים לשלב שימור: קיטו גמיש והחזרה זהירה של פחמימות איכותיות.'},
+];
+
+/* ---- אימוני התנגדות · תכנית מבוססת המדריך (5 תרגילים, 3 רמות) ---- */
+const LEVELS=[['kal','קל','נקודת פתיחה','😌'],['basis','בסיס','היעד','🎯'],['kashe','קשה','התקדמות','🔥']];
+const EXERCISES=[
+  {id:'squat', n:1, he:'סקוואט', en:'Squat', emo:'🦵', levels:{
+    kal:'קימה וישיבה מכיסא — שולטים בירידה ובעלייה.',
+    basis:'סקוואט מלא, ירכיים עד גובה הברכיים.',
+    kashe:'מחזיקים משקל בחזה, או ירידה איטית 3 שניות.'}},
+  {id:'bridge', n:2, he:'הרמת אגן', en:'Glute Bridge', emo:'🍑', levels:{
+    kal:'גשר רגיל, שתי רגליים, בלי עצירה.',
+    basis:'עם עצירה ולחיצת ישבן 2 שניות למעלה.',
+    kashe:'גשר על רגל אחת, או משקל על האגן.'}},
+  {id:'pushup', n:3, he:'שכיבות סמיכה', en:'Push-up', emo:'💪', levels:{
+    kal:'בעמידה מול קיר — דוחפים ומתקרבים.',
+    basis:'בזווית מול השיש או משטח נמוך יותר.',
+    kashe:'מהרצפה — קודם על הברכיים, אחר כך מלא.'}},
+  {id:'row', n:4, he:'חתירה', en:'Row', emo:'🚣', levels:{
+    kal:'יד נשענת על כיסא, מושכים משקל קל ביד השנייה.',
+    basis:'כפיפה עם שני בקבוקים, מרפקים אחורה.',
+    kashe:'משקל כבד יותר, או חתירה הפוכה מתחת לשולחן.'}},
+  {id:'lunge', n:5, he:'פסיעות', en:'Lunges', emo:'🚶', levels:{
+    kal:'פסיעה במקום, יד אוחזת בכיסא לתמיכה.',
+    basis:'צעד קדימה, ברך אחורית כמעט נוגעת, מתחלפים.',
+    kashe:'פסיעות בהליכה קדימה, או עם משקל בידיים.'}},
+];
+/* ---- תפריטי קיטו לדוגמה (יום שלם) ---- */
+const MENUS=[
+  {name:'קלאסי', kcal:1850, fat:150, prot:105, carb:22, meals:[
+    ['🍳 בוקר','אומלט 3 ביצים בחמאה + חצי אבוקדו + תרד מוקפץ'],
+    ['🥗 צהריים','חזה עוף בשמן זית + סלט ירוק גדול עם טחינה'],
+    ['🥩 ערב','סטייק אנטריקוט + ברוקולי מוקפץ בחמאה'],
+    ['🥜 נשנוש','חופן אגוזי מקדמיה + 4 זיתים']]},
+  {name:'ים־תיכוני', kcal:1780, fat:145, prot:100, carb:20, meals:[
+    ['🥑 בוקר','יוגורט שומן מלא 5% + אגוזי מלך + זרעי צ׳יה'],
+    ['🐟 צהריים','סלמון אפוי + סלט מלפפון־עגבנייה קטן בשמן זית'],
+    ['🧀 ערב','שקשוקה 2 ביצים עם גבינה בולגרית ואבוקדו'],
+    ['🫒 נשנוש','גבינה צהובה + זיתים']]},
+  {name:'צמחוני', kcal:1720, fat:148, prot:70, carb:24, meals:[
+    ['🥥 בוקר','פודינג צ׳יה בחלב קוקוס + אגוזים + קינמון'],
+    ['🥗 צהריים','סלט אבוקדו־ביצה גדול + גבינת פטה + שמן זית'],
+    ['🍄 ערב','טופו מוקפץ בשמן שומשום + קישוא ופטריות'],
+    ['🥑 נשנוש','חצי אבוקדו עם מלח ולימון']]},
+  {name:'מהיר ופשוט', kcal:1800, fat:150, prot:95, carb:18, meals:[
+    ['🍳 בוקר','2 ביצים קשות + אבוקדו + קפה עם שמנת מתוקה'],
+    ['🥫 צהריים','טונה בשמן זית על מיטת חסה + מיונז'],
+    ['🍗 ערב','שוקי עוף בתנור + כרובית אפויה בחמאה'],
+    ['🧀 נשנוש','מקלוני גבינת פרמזן']]},
+  {name:'צום 16:8', kcal:1750, fat:140, prot:100, carb:20, meals:[
+    ['☕ בוקר','קפה שחור / מים עם מלח (חלון צום)'],
+    ['🍽️ 13:00','המבורגר בקר בלי לחם + ביצת עין + סלט'],
+    ['🥩 19:00','דג לבן בחמאת שום + אספרגוס מוקפץ'],
+    ['🥜 בין הארוחות','חופן שקדים אם רעבים']]},
+  {name:'חורפי מנחם', kcal:1820, fat:150, prot:98, carb:23, meals:[
+    ['🍳 בוקר','ביצים מקושקשות בחמאה + נקניקיית איכות'],
+    ['🍲 צהריים','מרק עוף שמן עם ירקות דלי־פחמימה'],
+    ['🥩 ערב','תבשיל בקר בשמן זית + כרובית מעוכה בחמאה'],
+    ['🍫 נשנוש','2 קוביות שוקולד מריר 90%']]},
+];
+/* ---- פחמימות נטו לפרוסה/מנה נפוצה (גרם, בקירוב) ---- */
+const NETCARB=[
+  ['🥑 אבוקדו (חצי)',1],['🥚 ביצה',0.5],['🥦 ברוקולי (כוס)',4],['🥬 תרד (כוס)',0.4],
+  ['🧀 גבינה צהובה (30ג׳)',0.4],['🥒 מלפפון (חצי)',2],['🍅 עגבנייה (בינונית)',3],
+  ['🥜 שקדים (30ג׳)',2.5],['🌰 אגוזי מלך (30ג׳)',2],['🫒 זיתים (10)',1],
+  ['🥥 חלב קוקוס (100מ״ל)',3],['🍓 תות (5)',3],['🧅 בצל (רבע)',2],['🥕 גזר (בינוני)',5],
+];
+/* ---- מד היקפים (ס״מ) ---- */
+const MEASURES=[['waist','מותניים','📏'],['hips','ירכיים','🍑'],['belly','בטן','⭕'],['chest','חזה','🫁'],['arm','זרוע','💪'],['thigh','ירך','🦵']];
+function measureLatest(part){for(let i=S.measures.length-1;i>=0;i--){const v=S.measures[i].vals[part];if(v!=null)return v;}return null;}
+function measureFirst(part){for(let i=0;i<S.measures.length;i++){const v=S.measures[i].vals[part];if(v!=null)return v;}return null;}
+function trainDay(){const d=today();if(!d.workout)d.workout={};return d.workout;}
+function todayMenu(){return MENUS[(daysIn()+ (typeof menuShift==='number'?menuShift:0))%MENUS.length];}
+function ketosisLabel(v){ // mmol/L → פרשנות
+  if(v<0.5)return['מתחת לקטוזיס','var(--muted)'];
+  if(v<1.0)return['קטוזיס קל','var(--warn)'];
+  if(v<=3.0)return['קטוזיס תזונתי אופטימלי ✓','var(--good)'];
+  return['קטוזיס גבוה','var(--accent)'];
+}
+function exLevel(id){return (S.training.levels&&S.training.levels[id])||'kal';}
+function workoutDoneOn(date){const w=(S.days[date]&&S.days[date].workout)||{};return EXERCISES.every(e=>w[e.id]);}
+function workoutCount(date){const w=(S.days[date]&&S.days[date].workout)||{};return EXERCISES.filter(e=>w[e.id]).length;}
+function trainedIn(days){let c=0;for(let i=0;i<days;i++){const d=new Date(Date.now()-i*DAY).toISOString().slice(0,10);if(workoutDoneOn(d))c++;}return c;}
+
+/* ============================================================
+   Router
+   ============================================================ */
+let TAB='home';
+let menuShift=0; // לגלילה בין תפריטי הדוגמה
+let ketoneMode='blood'; // מצב מדידת קטונים: דם / שתן
+function render(){
+  const app=$('#app');
+  if(!S.onboarded){app.innerHTML=onboardingView();bindOnboarding();return;}
+  touchStreak();
+  app.innerHTML=`
+    ${header()}
+    <div class="view" id="view">${views[TAB]()}</div>
+    ${nav()}
+  `;
+  binders[TAB]&&binders[TAB]();
+  bindNav();
+}
+function go(tab){TAB=tab;render();window.scrollTo({top:0});}
+
+function header(){
+  const p=S.profile;
+  return `<header class="top"><div class="top-row">
+    <div class="brand">
+      <div class="logo">🥑</div>
+      <div><h1>המנטור שלי · קיטו</h1><div class="sub">${esc(p.name||'המסע שלך')} · יום ${daysIn()+1}</div></div>
+    </div>
+    <div class="chip-day">🔥 ${S.streak} ימי רצף</div>
+  </div></header>`;
+}
+
+function nav(){
+  const items=[['home','בית','🏠'],['plan','היום','✅'],['train','אימון','💪'],['mentor','מנטור','💬'],['food','תזונה','🥗'],['track','מעקב','📈']];
+  return `<nav class="nav">${items.map(([id,l,ic])=>
+    `<button data-tab="${id}" class="${TAB===id?'on':''}"><span class="ic">${ic}</span>${l}</button>`).join('')}</nav>`;
+}
+function bindNav(){document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.tab));}
+
+/* ============================================================
+   VIEW: Home
+   ============================================================ */
+const views={};
+views.home=function(){
+  const note=mentorDaily();
+  const eta=etaText();
+  const d=today();
+  const doneCount=HABITS.filter(h=>d.habits[h.id]).length;
+  const mm=macros();
+  return `
+  <div class="mentor-note">
+    <div class="who"><span class="av">🥑</span> המנטור שלך · מומחה קיטו</div>
+    <p>${note}</p>
+  </div>
+
+  <div class="card center">
+    <div class="ring" style="--p:${pctToGoal()}">
+      <div class="in"><b>${lostKg()>0?'−':''}${Math.abs(lostKg())}</b><span>ק״ג מתוך ${S.profile.goalLoss}</span></div>
+    </div>
+    <div class="row" style="justify-content:center;gap:6px;margin-top:6px">
+      <span class="pill brand">${pctToGoal()}% מהיעד</span>
+      ${eta?`<span class="pill accent">קצב נוכחי → ${eta}</span>`:`<span class="pill">רשמו שקילה כדי לחזות סיום</span>`}
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><span class="lbl">משקל נוכחי</span><b>${currentWeight()}</b><span class="muted" style="font-size:12px">יעד ${goalWeight()} ק״ג</span></div>
+    <div class="tile"><span class="lbl">יעד קלורי יומי</span><b>${S.targets.calories||calorieTarget()}</b><span class="muted" style="font-size:12px">קק״ל / יום</span></div>
+    <div class="tile"><span class="lbl">משימות היום</span><b>${doneCount}/${HABITS.length}</b><span class="muted" style="font-size:12px">הרגלים הושלמו</span></div>
+    <div class="tile"><span class="lbl">שקילה שבועית</span><b>${weeklyRate()>0?'−'+weeklyRate():'—'}</b><span class="muted" style="font-size:12px">ק״ג בשבוע</span></div>
+  </div>
+
+  <div class="card tight" id="macroCard" style="cursor:pointer">
+    <div class="row" style="align-items:center;justify-content:space-between;margin-bottom:8px">
+      <b style="font-size:14.5px">🥑 יעד המאקרו היומי</b>
+      <span class="muted" style="font-size:12px">${mm.cals} קק״ל ←</span>
+    </div>
+    <div class="row" style="gap:8px;text-align:center">
+      <div class="grow" style="background:var(--accent-100);border-radius:11px;padding:8px"><b style="font-size:18px;color:#b45b1e">${mm.fat}<small style="font-size:11px;font-weight:700">ג׳</small></b><div class="muted" style="font-size:11px;font-weight:800">🧈 שומן ${mm.pct.fat}%</div></div>
+      <div class="grow" style="background:var(--brand-100);border-radius:11px;padding:8px"><b style="font-size:18px;color:var(--brand-600)">${mm.prot}<small style="font-size:11px;font-weight:700">ג׳</small></b><div class="muted" style="font-size:11px;font-weight:800">🍗 חלבון ${mm.pct.prot}%</div></div>
+      <div class="grow" style="background:var(--bg-soft);border-radius:11px;padding:8px"><b style="font-size:18px;color:var(--good)">${mm.carb}<small style="font-size:11px;font-weight:700">ג׳</small></b><div class="muted" style="font-size:11px;font-weight:800">🥦 פחמ׳ נטו</div></div>
+    </div>
+  </div>
+
+  <div class="card tight">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div><b style="font-size:14.5px">💧 מים היום</b><div class="muted" style="font-size:12px">${d.water}/${S.targets.water} כוסות</div></div>
+      <div class="row"><button class="btn ghost sm" id="waterMinus">−</button><button class="btn sm" id="waterPlus">+ כוס</button></div>
+    </div>
+    <div class="bar water" style="margin-top:10px"><i style="width:${Math.min(100,d.water/S.targets.water*100)}%"></i></div>
+  </div>
+
+  <div class="card tight" id="trainCard" style="cursor:pointer">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div><b style="font-size:14.5px">💪 אימון היום</b><div class="muted" style="font-size:12px">${workoutCount(todayISO())}/${EXERCISES.length} תרגילים · 🔥 ${trainedIn(7)} השבוע</div></div>
+      <span class="pill ${workoutDoneOn(todayISO())?'brand':'accent'}">${workoutDoneOn(todayISO())?'הושלם ✓':'לאימון ←'}</span>
+    </div>
+    <div class="bar" style="margin-top:10px"><i style="width:${workoutCount(todayISO())/EXERCISES.length*100}%;background:linear-gradient(90deg,#0c684e,#16a377)"></i></div>
+  </div>
+
+  <div class="row wrap">
+    <button class="btn accent grow" id="qWeigh">⚖️ רשום שקילה</button>
+    <button class="btn ghost grow" id="qPlan">✅ למשימות היום</button>
+  </div>
+
+  <div class="section-title">היעד הקרוב</div>
+  ${nextMilestoneCard()}
+  `;
+};
+binders={};
+binders.home=function(){
+  const d=today();
+  $('#waterPlus').onclick=()=>{d.water++;save();render();};
+  $('#waterMinus').onclick=()=>{d.water=Math.max(0,d.water-1);save();render();};
+  $('#qWeigh').onclick=()=>go('track');
+  $('#qPlan').onclick=()=>go('plan');
+  $('#trainCard').onclick=()=>go('train');
+  $('#macroCard').onclick=()=>go('food');
+};
+function nextMilestoneCard(){
+  const done=lostKg();
+  const next=ROADMAP.find(m=>m.kg>done)||ROADMAP[ROADMAP.length-1];
+  const remain=+(next.kg-done).toFixed(1);
+  return `<div class="card"><div class="row" style="align-items:center;gap:12px">
+    <div class="ring" style="--p:${Math.min(100,done/next.kg*100)};width:64px;height:64px">
+      <div class="in"><b style="font-size:15px">${next.m}</b></div></div>
+    <div class="grow"><b style="font-size:14.5px">${next.title}</b>
+      <p class="muted" style="font-size:12.5px">עוד <b style="color:var(--brand-600)">${remain>0?remain:0} ק״ג</b> ליעד אבן הדרך הבא</p></div>
+  </div></div>`;
+}
+
+/* ============================================================
+   VIEW: Plan / habits
+   ============================================================ */
+views.plan=function(){
+  const d=today();const done=HABITS.filter(h=>d.habits[h.id]).length;
+  const moods=[['great','מצוין','😄'],['ok','בסדר','🙂'],['meh','ככה־ככה','😐'],['low','קשה לי','😔']];
+  return `
+  <div class="card tight">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <h2>המשימות של היום</h2><span class="pill brand">${done}/${HABITS.length}</span>
+    </div>
+    <p class="muted" style="font-size:12.5px;margin-bottom:6px">כל סימון קטן הוא ניצחון. לא צריך מושלם — צריך עקבי.</p>
+    <div id="habits">
+      ${HABITS.map(h=>`<div class="habit ${d.habits[h.id]?'done':''}" data-h="${h.id}">
+        <div class="box">✓</div><div class="t">${h.t}</div><div class="emo">${h.emo}</div></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>איך את/ה מרגיש/ה היום?</h2>
+    <div class="seg" id="mood" style="margin-top:10px">
+      ${moods.map(([id,l,e])=>`<button data-m="${id}" class="${d.mood===id?'on':''}">${e}<small>${l}</small></button>`).join('')}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>יומן קצר</h2>
+    <p class="muted" style="font-size:12.5px;margin-bottom:8px">מה עזר היום? מה היה מאתגר? כתיבה מחזקת מודעות.</p>
+    <textarea class="input" id="journal" placeholder="היום שמתי לב ש...">${esc(d.journal||'')}</textarea>
+    <button class="btn sm" id="saveJournal" style="margin-top:10px">שמירה</button>
+  </div>
+
+  <div class="section-title">תזכורות יומיות</div>
+  ${remindersCard()}`;
+};
+function remindersCard(){
+  const r=S.reminders;
+  const supported=('Notification'in window);
+  const perm=supported?Notification.permission:'unsupported';
+  const active=r.enabled&&perm==='granted';
+  return `<div class="card">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div><b style="font-size:14.5px">🔔 תזכורות</b>
+        <div class="muted" style="font-size:12px">מים · אלקטרוליטים · שקילה</div></div>
+      <button class="btn sm ${active?'ghost':''}" id="remToggle">${active?'פעיל ✓':'הפעל תזכורות'}</button>
+    </div>
+    ${!supported?`<div class="note-box" style="margin-top:12px">הדפדפן הזה לא תומך בהתראות. אפשר עדיין להשתמש בשעות כרשימת יעד.</div>`:''}
+    ${perm==='denied'?`<div class="note-box" style="margin-top:12px">ההתראות חסומות בהגדרות הדפדפן. יש לאשר אותן כדי להפעיל.</div>`:''}
+    <div id="remList" style="margin-top:6px">
+      ${r.items.map(it=>`<div class="row" data-id="${it.id}" style="align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)">
+        <button class="remOn box" data-id="${it.id}" style="width:26px;height:26px;flex:0 0 auto;border-radius:8px;border:2px solid ${it.on?'var(--good)':'var(--line)'};background:${it.on?'var(--good)':'transparent'};color:${it.on?'#fff':'transparent'};display:grid;place-items:center;font-size:15px;font-weight:800">✓</button>
+        <span style="font-size:19px">${it.emoji}</span>
+        <span class="grow" style="font-weight:700;font-size:13.5px;${it.on?'':'opacity:.5'}">${it.label}</span>
+        <input class="input remTime" data-id="${it.id}" type="time" value="${it.time}" style="flex:0 0 108px;padding:8px 10px">
+        ${it.emoji==='💧'?`<button class="remDel" data-id="${it.id}" style="color:var(--bad);font-size:20px;font-weight:800;padding:0 4px">×</button>`:''}
+      </div>`).join('')}
+    </div>
+    <button class="btn ghost sm" id="remAddWater" style="margin-top:12px;width:100%">＋ תזכורת מים נוספת</button>
+    <p class="muted" style="font-size:11.5px;margin-top:10px">התזכורות פועלות כשהאפליקציה פתוחה בדפדפן. לחוויית אפליקציה מלאה — "הוסף למסך הבית".</p>
+  </div>`;
+}
+binders.plan=function(){
+  const d=today();
+  bindReminders();
+  document.querySelectorAll('#habits .habit').forEach(el=>el.onclick=()=>{
+    const id=el.dataset.h;d.habits[id]=!d.habits[id];save();
+    el.classList.toggle('done');
+    if(HABITS.every(h=>d.habits[h.id]))toast('כל הכבוד! יום מושלם 🌟');
+  });
+  document.querySelectorAll('#mood button').forEach(b=>b.onclick=()=>{
+    d.mood=b.dataset.m;save();
+    document.querySelectorAll('#mood button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    if(d.mood==='low')toast('גם ימים קשים הם חלק מהמסע. אני כאן 💚');
+  });
+  $('#saveJournal').onclick=()=>{d.journal=$('#journal').value;save();toast('נשמר ביומן 📝');};
+};
+function bindReminders(){
+  const t=$('#remToggle'); if(!t)return;
+  t.onclick=async()=>{
+    if(!('Notification'in window)){toast('הדפדפן לא תומך בהתראות');return;}
+    if(S.reminders.enabled&&Notification.permission==='granted'){
+      S.reminders.enabled=false;save();toast('תזכורות כבו');render();return;
+    }
+    let perm=Notification.permission;
+    if(perm!=='granted')perm=await Notification.requestPermission();
+    if(perm==='granted'){
+      S.reminders.enabled=true;save();startReminderLoop();
+      try{new Notification('המנטור שלי · קיטו',{body:'🔔 התזכורות הופעלו! נדבר לאורך היום.'});}catch(e){}
+      toast('תזכורות הופעלו ✓');render();
+    }else toast('צריך לאשר התראות בדפדפן');
+  };
+  document.querySelectorAll('.remOn').forEach(b=>b.onclick=()=>{
+    const it=S.reminders.items.find(x=>x.id===b.dataset.id);it.on=!it.on;save();render();
+  });
+  document.querySelectorAll('.remTime').forEach(inp=>inp.onchange=()=>{
+    const it=S.reminders.items.find(x=>x.id===inp.dataset.id);it.time=inp.value;save();
+  });
+  document.querySelectorAll('.remDel').forEach(b=>b.onclick=()=>{
+    S.reminders.items=S.reminders.items.filter(x=>x.id!==b.dataset.id);save();render();
+  });
+  const add=$('#remAddWater'); if(add)add.onclick=()=>{
+    S.reminders.items.push({id:'w'+Date.now(),label:'לשתות מים',emoji:'💧',time:'12:00',on:true});
+    save();render();
+  };
+}
+let reminderTimer=null;
+function startReminderLoop(){
+  if(reminderTimer)return;
+  reminderTimer=setInterval(reminderTick,30000);
+  reminderTick();
+}
+function reminderTick(){
+  const r=S.reminders;
+  if(!r||!r.enabled||!('Notification'in window)||Notification.permission!=='granted')return;
+  const now=new Date();
+  const hhmm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const d=todayISO();
+  if(r.fired.date!==d){r.fired={date:d,ids:[]};save();}
+  r.items.forEach(it=>{
+    if(it.on&&it.time===hhmm&&!r.fired.ids.includes(it.id)){
+      try{new Notification('המנטור שלי · קיטו',{body:it.emoji+' '+it.label});}catch(e){}
+      r.fired.ids.push(it.id);save();
+    }
+  });
+}
+
+/* ============================================================
+   VIEW: Training — לוח אימוני התנגדות יומי
+   ============================================================ */
+views.train=function(){
+  const w=trainDay();
+  const done=EXERCISES.filter(e=>w[e.id]).length;
+  const t=S.training;
+  const week=trainedIn(7), month=trainedIn(30);
+  // last 7 days dots (today on the right)
+  const dots=[];
+  for(let i=6;i>=0;i--){
+    const dt=new Date(Date.now()-i*DAY).toISOString().slice(0,10);
+    const full=workoutDoneOn(dt), part=workoutCount(dt);
+    dots.push(`<div title="${dt}" style="flex:1;text-align:center">
+      <div style="height:34px;border-radius:9px;display:grid;place-items:center;font-size:15px;
+        background:${full?'var(--good)':part?'var(--accent-100)':'var(--bg-soft)'};
+        color:${full?'#fff':'var(--ink-soft)'};font-weight:800">${full?'✓':part?part:'·'}</div>
+      <div style="font-size:9.5px;color:var(--muted);font-weight:700;margin-top:3px">${['א','ב','ג','ד','ה','ו','ש'][new Date(dt).getDay()]}</div></div>`);
+  }
+  return `
+  <div class="mentor-note" style="background:linear-gradient(135deg,#0c684e,#12946f)">
+    <div class="who"><span class="av">💪</span> אימון היום · מעגל כוח מלא גוף</div>
+    <p>${done===EXERCISES.length?'סיימת את כל המעגל היום — כל הכבוד! 🎉':done?`התקדמת יפה — ${done} מתוך ${EXERCISES.length} תרגילים. אפשר להשלים!`:'מעגל קצר של 5 תרגילים, בבית, בלי ציוד. מספיק 15–20 דקות. יאללה מתחילים!'}</p>
+  </div>
+
+  <div class="card tight">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div><b style="font-size:15px">מבנה האימון</b><div class="muted" style="font-size:12px">כמה סבבים וחזרות מכל תרגיל</div></div>
+      <span class="pill brand">${done}/${EXERCISES.length} הושלמו</span>
+    </div>
+    <div class="row" style="gap:10px;margin-top:12px">
+      <div class="grow" style="text-align:center;background:var(--bg-soft);border-radius:13px;padding:10px">
+        <div class="muted" style="font-size:11.5px;font-weight:800">סבבים</div>
+        <div class="row" style="align-items:center;justify-content:center;gap:12px;margin-top:4px">
+          <button class="btn ghost sm setr" data-k="sets" data-d="-1" style="padding:6px 12px">−</button>
+          <b id="valSets" style="font-size:22px;min-width:22px">${t.sets}</b>
+          <button class="btn ghost sm setr" data-k="sets" data-d="1" style="padding:6px 12px">+</button>
+        </div>
+      </div>
+      <div class="grow" style="text-align:center;background:var(--bg-soft);border-radius:13px;padding:10px">
+        <div class="muted" style="font-size:11.5px;font-weight:800">חזרות</div>
+        <div class="row" style="align-items:center;justify-content:center;gap:12px;margin-top:4px">
+          <button class="btn ghost sm setr" data-k="reps" data-d="-1" style="padding:6px 12px">−</button>
+          <b id="valReps" style="font-size:22px;min-width:28px">${t.reps}</b>
+          <button class="btn ghost sm setr" data-k="reps" data-d="1" style="padding:6px 12px">+</button>
+        </div>
+      </div>
+    </div>
+    <p class="muted" style="font-size:12px;margin-top:10px">מנוחה 30–60 שניות בין סבבים. מומלץ להתחיל מ־2 סבבים ולהתקדם ל־3.</p>
+  </div>
+
+  <div class="section-title">התרגילים · בחר/י רמה לכל תרגיל</div>
+  <div id="exWrap">
+    ${EXERCISES.map(e=>{const lv=exLevel(e.id);const isDone=!!w[e.id];return `
+    <div class="card tight ex ${isDone?'ex-done':''}" data-ex="${e.id}" style="border-color:${isDone?'var(--good)':'var(--line)'}">
+      <div class="row" style="align-items:center;gap:11px">
+        <div style="width:42px;height:42px;flex:0 0 auto;border-radius:12px;background:var(--brand-100);display:grid;place-items:center;font-size:22px">${e.emo}</div>
+        <div class="grow">
+          <b style="font-size:15.5px">${e.n}. ${e.he}</b>
+          <span class="muted" style="font-size:12px;font-weight:700"> · ${e.en}</span>
+        </div>
+        <button class="exdone box" data-ex="${e.id}" style="width:32px;height:32px;flex:0 0 auto;border-radius:10px;border:2px solid ${isDone?'var(--good)':'var(--line)'};background:${isDone?'var(--good)':'transparent'};color:${isDone?'#fff':'transparent'};display:grid;place-items:center;font-size:18px;font-weight:800">✓</button>
+      </div>
+      <div class="seg exlvl" data-ex="${e.id}" style="margin-top:12px">
+        ${LEVELS.map(([k,l,sub,emo])=>`<button data-lv="${k}" class="${lv===k?'on':''}">${emo} ${l}<small>${sub}</small></button>`).join('')}
+      </div>
+      <div class="lvdesc" style="margin-top:10px;background:var(--bg-soft);border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:600;color:var(--ink-soft)">${e.levels[lv]}</div>
+    </div>`;}).join('')}
+  </div>
+
+  <div class="acc" style="margin-top:4px" open><summary>איך עולים רמה?</summary>
+    <div class="inner">כשמסיימים את כל הסבבים והחזרות <b>בקלות ובטכניקה טובה</b> — עולים שלב.<br>אם הטכניקה מתפרקת — יורדים שלב בלי היסוס. אין בזה כישלון, זו בנייה נכונה.</div></div>
+  <div class="note-box" style="margin-top:2px">📈 <span><b>עומס מתקדם:</b> אפשר להתחזק גם בתוך אותה רמה — קודם עוד חזרה או עוד סבב, אחר כך משקל, אחר כך ירידה איטית יותר. כל שבוע קצת יותר ממה שהיה נוח בפעם הקודמת. זה מה ששומר על השריר.</span></div>
+
+  <div class="section-title">עקביות</div>
+  <div class="card">
+    <div class="tiles" style="margin-bottom:14px">
+      <div class="tile"><span class="lbl">השבוע</span><b>${week}</b><span class="muted" style="font-size:12px">אימונים מלאים</span></div>
+      <div class="tile"><span class="lbl">30 יום</span><b>${month}</b><span class="muted" style="font-size:12px">אימונים מלאים</span></div>
+    </div>
+    <div class="row" style="gap:6px">${dots.join('')}</div>
+  </div>
+
+  <div class="note-box" style="margin-top:2px">⚕️ <span>מתחילים בעדינות. אם יש כאב (לא מאמץ רגיל), מגבלה רפואית או פציעה — עצרו והתייעצו עם איש/אשת מקצוע. חימום קצר לפני ומתיחות אחרי עוזרים.</span></div>
+  `;
+};
+binders.train=function(){
+  const w=trainDay();
+  // level selection per exercise
+  document.querySelectorAll('.exlvl').forEach(seg=>{
+    const id=seg.dataset.ex, ex=EXERCISES.find(e=>e.id===id);
+    seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+      const lv=b.dataset.lv;
+      if(!S.training.levels)S.training.levels={};
+      S.training.levels[id]=lv;save();
+      seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+      seg.parentElement.querySelector('.lvdesc').textContent=ex.levels[lv];
+    });
+  });
+  // done toggles
+  document.querySelectorAll('.exdone').forEach(btn=>btn.onclick=()=>{
+    const id=btn.dataset.ex;w[id]=!w[id];save();
+    const all=EXERCISES.every(e=>w[e.id]);
+    if(all){toast('מעגל הושלם! שריר נבנה 💪🔥');}
+    render();
+  });
+  // sets/reps steppers
+  document.querySelectorAll('.setr').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k, d=+b.dataset.d;
+    S.training[k]=Math.max(k==='sets'?1:3,Math.min(k==='sets'?6:30,S.training[k]+d));save();
+    $(k==='sets'?'#valSets':'#valReps').textContent=S.training[k];
+  });
+};
+
+/* ============================================================
+   VIEW: Mentor chat  (rule-based supportive coach)
+   ============================================================ */
+views.mentor=function(){
+  if(!S.chat.length)S.chat.push({who:'bot',text:mentorGreeting()});
+  const quicks=['בא לי פחמימות 🍞','יש לי שפעת קיטו','אלקטרוליטים?','המשקל נתקע','מה לאכול עכשיו?','אני בקטוזיס?','תן לי מוטיבציה'];
+  return `
+  <div class="quick">${quicks.map(q=>`<button data-q="${esc(q)}">${q}</button>`).join('')}</div>
+  <div class="chat" id="chat">
+    ${S.chat.map(m=>`<div class="bubble ${m.who}">${esc(m.text)}</div>`).join('')}
+  </div>
+  <div class="chatbar">
+    <input id="msg" placeholder="ספר/י לי מה עובר עליך..." autocomplete="off">
+    <button id="send">➤</button>
+  </div>`;
+};
+binders.mentor=function(){
+  const scroll=()=>{const c=$('#chat');window.scrollTo({top:document.body.scrollHeight});};
+  scroll();
+  function send(text){
+    text=text.trim();if(!text)return;
+    S.chat.push({who:'me',text});save();
+    const reply=mentorReply(text);
+    $('#chat').insertAdjacentHTML('beforeend',`<div class="bubble me">${esc(text)}</div>`);
+    setTimeout(()=>{
+      S.chat.push({who:'bot',text:reply});save();
+      $('#chat').insertAdjacentHTML('beforeend',`<div class="bubble bot">${esc(reply)}</div>`);
+      scroll();
+    },350);
+    $('#msg').value='';scroll();
+  }
+  $('#send').onclick=()=>send($('#msg').value);
+  $('#msg').onkeydown=e=>{if(e.key==='Enter')send($('#msg').value);};
+  document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>send(b.dataset.q));
+};
+
+/* ---- the mentor "brain": empathetic, CBT-flavored, in Hebrew ---- */
+function mentorGreeting(){
+  const n=S.profile.name?` ${S.profile.name}`:'';
+  return `היי${n} 🥑 אני המנטור האישי שלך — מומחה לדיאטה קטוגנית. אני כאן איתך בכל שלב, מהכניסה לקטוזיס ועד היעד.\nאפשר לשאול אותי כל דבר על קיטו: מה לאכול, שפעת קיטו, אלקטרוליטים, פחמימות מסתננות, סטול במשקל, או פשוט לבקש חיזוק. מה עובר עליך עכשיו?`;
+}
+function pick(a){return a[Math.floor((daysIn()+a.length*7+S.chat.length)%a.length)];} // דטרמיניסטי, מתחלף
+const REPLIES=[
+  {k:['שפעת','קיטו פלו','כאב ראש','בחילה','סחרחור','חלש','חולשה','שפעת קיטו'],a:[
+`מה שאת/ה מרגיש/ה כנראה "שפעת הקיטו" — והחדשות הטובות: זה כמעט תמיד מחסור באלקטרוליטים, לא סימן להיכשל. הגוף מפריש הרבה נתרן ומים בשבוע הראשון.\nהפתרון המהיר: כוס מרק עוף מלוח + כוס מים גדולה עכשיו. תוך שעה תרגיש/י הבדל. גם קורט מלח בים בכל כוס מים עוזר.`,
+`זה שלב חולף (2–5 ימים) בדרך להסתגלות לשומן. שלושת המפתחות: 🧂 מלח (3–5 ג׳ ליום), 🥑 אשלגן (אבוקדו/תרד), 💊 מגנזיום בערב.\nאל תורידי גם את השומן — הוא הדלק החדש שלך. תחזיקי מעמד, הצד השני שווה את זה.`]},
+  {k:['אלקטרו','מלח','נתרן','מגנזיום','אשלגן','התכווצ','שריר','עצירות'],a:[
+`אלקטרוליטים הם ה־ABC של קיטו מוצלח. יעד יומי בערך: נתרן 3–5 ג׳, אשלגן ~3–4 ג׳ (אבוקדו, תרד, סלמון), מגנזיום 300–400 מ״ג.\nהתכווצויות שרירים או עצירות? כמעט תמיד מגנזיום או מלח חסרים. מרק עצמות/עוף הוא הפתרון הכי פשוט.`,
+`טיפ של מומחה: אל תפחדי ממלח בקיטו — ההיגיון ה"רגיל" של מעט מלח לא תקף כאן, כי הגוף מפריש הרבה נתרן. מלח מספיק מונע את רוב תופעות הלוואי.`]},
+  {k:['פחמימ','סוכר','לחם','פסטה','אורז','קמח','נשנש','חטיף','מתוק','בא לי','פיתה','עוגה'],a:[
+`התשוקה לפחמימה חזקה בהתחלה — היא נחלשת מאוד אחרי הסתגלות לשומן. עכשיו: כוס מים + קורט מלח, והמתן/י 10 דק׳. פעמים רבות זה בעצם צורך באלקטרוליטים.\nאם עדיין בא לך משהו — לך/י על קטו: קובייה שוקולד מריר 90%, חופן אגוזי מקדמיה, או ביצה קשה עם מלח. מנחם ולא מוציא מקטוזיס.`,
+`שים/י לב: הרבה "רעב למתוק" בקיטו הוא הרגל או רגש, לא רעב אמיתי. בסולם 1–10 — כמה רעב/ה באמת?\nחלופה מתוקה־בטוחה: יוגורט שומן מלא + אריתריטול + קינמון, או "פאט בומב" משמן קוקוס וקקאו. בלי פחמימות, עם תחושת פינוק.`]},
+  {k:['כוח','עייף','מותש','אנרגיה','לא בא לי','עצל'],a:[
+`בשבועיים הראשונים ירידת אנרגיה היא נורמלית — הגוף עובר ממערכת סוכר למערכת שומן. שני חשודים עיקריים: מעט מלח, ומעט שומן.\nוודא/י שאכלת מספיק שומן היום ושתית מים עם מלח. ואם זה יום חלש — מספיק 5 דקות הליכה. לא צריך שיא, צריך לא לוותר.`,
+`אחרי ההסתגלות (2–4 שבועות) רוב האנשים מדווחים על אנרגיה יציבה יותר מאי־פעם, בלי הצניחות של אחרי הצהריים. את/ה בדיוק בתוך המעבר — תחזיק/י מעמד.`]},
+  {k:['נכשל','נכשלתי','פישלתי','אכלתי פחמימ','זללתי','הרסתי','אכזבתי','יצאתי מקטוזיס','יצאתי מקיטוזיס'],a:[
+`עצור/י — לא נכשלת. אכילת פחמימה חד־פעמית לא מוחקת שבועות. כן, ייתכן שיצאת מקטוזיס לרגע, אבל חוזרים תוך יום־יומיים של הקפדה. זה הכול.\nהפעולה הבאה היא שקובעת: ארוחה קטוגנית — חלבון+שומן+ירקות עליים. הליכה קצרה עכשיו תעזור לנצל את הסוכר. נתחיל משם?`,
+`הקול של "הרסתי הכול" הוא הרגל מחשבתי ישן, לא האמת. במקום "נכשלתי" — "החלקתי, וחוזר/ת לקטו עכשיו".\nמה קרה לפני שאכלת? רעב אמיתי, לחץ, אירוע חברתי? זיהוי הטריגר שווה יותר מכל האשמה, ועוזר לנו לתכנן להבא.`]},
+  {k:['עליתי','עלה','המשקל עלה','לא יורד','תקוע','סטול','פלטו','פלאטו','לא זז','נתקע'],a:[
+`בקיטו, המספר על המאזניים מושפע מאוד ממים ואלקטרוליטים — עלייה של יום היא כמעט אף פעם לא שומן. תסתכל/י על מגמה של שבועיים, לא על יום בודד.\nאם באמת יש סטול: החשוד #1 הוא פחמימות מסתננות — רטבים, "מוצרי קיטו", אגוזים בכמות. בוא/י נבדוק את היומיים האחרונים יחד.`,
+`שוברי סטול נפוצים בקיטו: 1) לוודא פחות מ־25 ג׳ פחמימות נטו, 2) לא להגזים בחלבון/אגוזים, 3) לנסות חלון אכילה (צום 16:8), 4) שינה ומלח. משנים גורם אחד לשבוע ובודקים.\nכמה זמן את/ה תקוע/ה? נבחר צעד אחד להתחיל ממנו.`]},
+  {k:['מה לאכול','מה אוכלים','ארוחה','תפריט','לאכול עכשיו','מנה','רעיון','מתכון'],a:[
+`עקרון הצלחת הקטוגנית: בסיס חלבון (ביצים/עוף/דג/בקר) + הרבה שומן בריא (שמן זית/חמאה/אבוקדו) + ירקות עליים דלי־פחמימה. בלי עמילנים.\nמהיר עכשיו: אומלט 3 ביצים בחמאה + אבוקדו + תרד מוקפץ. או טונה בשמן זית על מיטת חסה. רוצה שאתאים לפי מה שיש במקרר?`,
+`רעיונות קטו קלים:\n🍳 בוקר: ביצים+אבוקדו, או יוגורט שומן מלא+אגוזים\n🥗 צהריים: סלמון/עוף + סלט גדול בשמן זית\n🥩 ערב: סטייק/המבורגר בלי לחם + ברוקולי בחמאה\n🥜 נשנוש: זיתים, גבינה צהובה, ביצה קשה, אגוזי מקדמיה.\nרוצה תפריט יום שלם?`]},
+  {k:['מוטיבציה','דחיפה','חיזוק','עידוד','קשה לי','מיואש','מתייאש','מוותר'],a:[
+`תזכור/י למה התחלת. לא בשביל מספר — בשביל אנרגיה יציבה, ראש צלול, ולהסתכל במראה ולחייך. קיטו נותן את זה כשמתמידים.\nוכבר עשית ${daysIn()+1} ימים${lostKg()>0?' וירדת '+lostKg()+' ק״ג':''}. זה לא מובן מאליו — זו בחירה יומית בעצמך. אני גאה בך.`,
+`המסע הוא של שנה, לא של שבוע — וזה היתרון. אין צורך במושלמות, רק בהמשכיות. יום פחות טוב לא מבטל את כל השאר.\n${lostKg()>0?'כבר '+lostKg()+' ק״ג מאחוריך':'עשית את הצעד הכי קשה — התחלת'}. תמשיך/י. אני איתך בכל צעד. 💚`]},
+  {k:['לחוץ','לחץ','חרד','עצוב','בדידות','משעמם','רגש','אוכל רגשי'],a:[
+`הרבה פעמים ה"רעב" הוא רגש שמחפש מוצא, לא צורך פיזי — אנושי לגמרי. בקיטו זה קל יותר לזהות, כי השובע מהשומן יציב.\nמה עוזר לך להירגע חוץ מאוכל? מוזיקה, נשימות, שיחה, יציאה החוצה? נבחר אחד וננסה עכשיו. ואם בכל זאת רוצים ללעוס — זיתים או ביצה קשה, בלי לצאת מקטוזיס.`,
+`ננשום יחד: שאיפה 4 שניות, החזקה 4, נשיפה 6. שלוש פעמים. זה מרגיע את הדחף האוטומטי.\nהרגש יעבור — הוא תמיד עובר. ואת/ה חזק/ה יותר ממה שנדמה לך.`]},
+  {k:['קטוזיס','קיטוזיס','קטונים','מדידה','מקלונים','בקטוזיס','נכנסתי'],a:[
+`נכנסים לקטוזיס בדרך כלל אחרי 2–4 ימים מתחת ל־25 ג׳ פחמימות נטו. סימנים: ירידה בתיאבון, אנרגיה יציבה, ולפעמים טעם מתכתי קל בפה או ריח נשימה שונה.\nלמדוד זה נחמד אבל לא חובה: מקלוני שתן (זולים, מדויקים בהתחלה) או מד־קטונים בדם (מדויק יותר). ההרגשה היא המדד הכי טוב.`,
+`"הסתגלות לשומן" מלאה לוקחת 2–4 שבועות — מעבר לקטוזיס עצמו. אז מגיעים היתרונות הגדולים: תיאבון נמוך, אנרגיה יציבה וצום טבעי בין ארוחות. סבלנות בשלב הזה משתלמת מאוד.`]},
+];
+function mentorReply(text){
+  const t=text.toLowerCase();
+  for(const r of REPLIES){if(r.k.some(k=>t.includes(k)))return pick(r.a);}
+  // ברירת מחדל — מכיל ומזמין, בגוון קטו
+  return pick([
+`אני שומע/ת אותך. ספר/י לי עוד — זה קשור לאוכל, לתשוקה לפחמימה, לאנרגיה, או למצב הרוח? נפרק את זה יחד לצעד קטן וקטוגני.`,
+`תודה ששיתפת. בקיטו, כמו בכל דבר, מה שמתאים לך חשוב יותר מכל כלל. מה היית רוצה שיהיה אחרת מחר, ולו במעט?`,
+`אני כאן. לפעמים עצם זה ששמים במילים את מה שקורה בפנים כבר מקל. מה הצעד הכי קטן שאת/ה מרגיש/ה מוכן/ה אליו היום?`]);
+}
+function mentorDaily(){
+  const arr=[
+`בוקר טוב 🥑 היום היעד פשוט: מתחת ל־25 ג׳ פחמימות נטו, מספיק שומן, וקורט מלח במים. הגוף שלך יודע לשרוף שומן — תן/י לו.`,
+`תזכורת מומחה: אלקטרוליטים הם 90% מההרגשה הטובה בקיטו. מלח, מים ומגנזיום — והאנרגיה מגיעה בעקבותיהם.`,
+`את/ה כבר ${daysIn()+1} ימים במסע. ${lostKg()>0?'כבר '+lostKg()+' ק״ג פחות':'ההתחלה היא הצעד הכי קשה — ועשית אותו'}. ההתמדה היא שמנצחת, לא המושלמות.`,
+`התשוקה לסוכר נחלשת ככל שמתמידים — כל יום קטו הוא עוד לבנה בהסתגלות לשומן. תחזיק/י מעמד, הצד השני שקט ויציב.`,
+`בקיטו לא רעבים — אוכלים שומן שמשביע לשעות. אם בא מתוק, זה לרוב רגש או מחסור במלח. עצירה קטנה לפני כל ביס עושה את ההבדל.`,
+`אם אתמול הייתה החלקה לפחמימה — היום דף חדש. חוזרים לקטו בארוחה הבאה, בלי דרמה. אני מאמין/ה בך. 💚`];
+  return arr[daysIn()%arr.length];
+}
+
+/* ============================================================
+   VIEW: Food / nutrition guide
+   ============================================================ */
+views.food=function(){
+  const m=macros();
+  return `
+  <div class="card">
+    <h2>🥑 יעד המאקרו הקטוגני שלך</h2>
+    <p class="muted" style="font-size:13px">בקיטו לא סופרים רק קלוריות — מכוונים <b>מאקרו</b>: מעט מאוד פחמימות, חלבון מתון, והרבה שומן בריא כדלק.</p>
+    <div class="plate">
+      <div style="flex:${Math.max(6,m.pct.fat)};background:var(--accent)">${m.pct.fat}% שומן</div>
+      <div style="flex:${Math.max(4,m.pct.prot)};background:var(--brand)">${m.pct.prot}% חלבון</div>
+      <div style="flex:${Math.max(2,m.pct.carb)};background:var(--good)">${m.pct.carb}%</div>
+    </div>
+    <div class="tiles" style="grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
+      <div class="tile" style="padding:11px"><span class="lbl">🧈 שומן</span><b style="font-size:20px">${m.fat}</b><span class="muted" style="font-size:11px">גרם/יום</span></div>
+      <div class="tile" style="padding:11px"><span class="lbl">🍗 חלבון</span><b style="font-size:20px">${m.prot}</b><span class="muted" style="font-size:11px">גרם/יום</span></div>
+      <div class="tile" style="padding:11px"><span class="lbl">🥦 פחמימה</span><b style="font-size:20px">${m.carb}</b><span class="muted" style="font-size:11px">ג׳ נטו/יום</span></div>
+    </div>
+    <p class="muted" style="font-size:12px;margin-top:10px">סה״כ ~${m.cals} קק״ל. <b>פחמימות נטו</b> = פחמימות פחות סיבים תזונתיים.</p>
+  </div>
+
+  <div class="section-title">מותר בשפע · במידה · להימנע</div>
+  <div class="card">
+    <div class="swap"><span class="to" style="text-align:start">✅ שומנים: שמן זית, חמאה, אבוקדו, טחינה, אגוזים, זרעים</span></div>
+    <div class="swap"><span class="to" style="text-align:start">✅ חלבון: ביצים, עוף, בקר, דגים שמנים, גבינות שמנות</span></div>
+    <div class="swap"><span class="to" style="text-align:start">✅ ירקות עליים ודלי־פחמימה: חסה, תרד, ברוקולי, כרובית, קישוא, מלפפון, אבוקדו</span></div>
+    <hr class="hr">
+    <div class="swap"><span style="color:var(--warn);font-weight:800;text-align:start">🟠 במידה: עגבנייה, בצל, גזר, פירות יער, שוקולד מריר 85%+</span></div>
+    <hr class="hr">
+    <div class="swap"><span class="from" style="text-align:start">❌ סוכר, לחם, פסטה, אורז, תפוח אדמה, קטניות</span></div>
+    <div class="swap"><span class="from" style="text-align:start">❌ רוב הפירות, מיצים, משקאות מתוקים, דבש</span></div>
+  </div>
+
+  <div class="section-title">החלפות קטוגניות</div>
+  <div class="card">
+    ${[['אורז לבן','אורז כרובית'],['פסטה','ספגטי קישוא / זודלס'],['לחם לכריך','עלה חסה / לחם קיטו משקדים'],['תפוצ׳יפס','צ׳יפס גבינת פרמזן / חמאת בוטנים'],['סוכר','אריתריטול / סטיביה'],['חלב','משקה שקדים/קוקוס לא ממותק'],['נשנוש מתוק','חופן אגוזי מקדמיה / זיתים']]
+      .map(([f,t])=>`<div class="swap"><span class="from">${f}</span><span class="arw">←</span><span class="to">${t}</span></div>`).join('')}
+  </div>
+
+  <div class="section-title">תפריט קיטו לדוגמה</div>
+  ${menuCard()}
+
+  <div class="section-title">מחשבון פחמימות נטו</div>
+  <div class="card">
+    <p class="muted" style="font-size:12.5px;margin-bottom:10px">פחמימות נטו = סה״כ פחמימות − סיבים תזונתיים. זה מה שסופרים בקיטו.</p>
+    <div class="row" style="gap:8px">
+      <div class="grow"><label style="font-size:12px;font-weight:800;display:block;margin-bottom:5px">סה״כ פחמ׳ (ג׳)</label>
+        <input class="input" id="ncTotal" type="number" inputmode="decimal" step="0.1" placeholder="0"></div>
+      <div class="grow"><label style="font-size:12px;font-weight:800;display:block;margin-bottom:5px">סיבים (ג׳)</label>
+        <input class="input" id="ncFiber" type="number" inputmode="decimal" step="0.1" placeholder="0"></div>
+    </div>
+    <div id="ncResult" style="margin-top:12px;text-align:center;background:var(--brand-100);border-radius:13px;padding:14px">
+      <b style="font-size:28px;color:var(--brand-600)" id="ncVal">0</b>
+      <span class="muted" style="font-weight:800"> ג׳ פחמימות נטו</span></div>
+    <details class="acc" style="margin-top:12px"><summary>טבלת פחמימות נטו למאכלים נפוצים</summary>
+      <div class="inner">${NETCARB.map(([f,g])=>`<div class="swap"><span class="grow">${f}</span><span style="font-weight:900;color:${g<=3?'var(--good)':'var(--warn)'}">${g} ג׳</span></div>`).join('')}</div></details>
+  </div>
+
+  <div class="section-title">שפעת הקיטו & אלקטרוליטים</div>
+  <div class="card">
+    <p style="font-size:13.5px">בימים הראשונים ייתכנו עייפות, כאב ראש או עצבנות — זו "שפעת הקיטו", והיא כמעט תמיד <b>מחסור באלקטרוליטים ומים</b>, לא סימן להיכשל. הפתרון פשוט:</p>
+    <div style="margin-top:10px">
+      ${[['🧂 נתרן','3–5 גרם מלח ביום — מרק עוף מלוח פותר הרבה'],['🥑 אשלגן','אבוקדו, תרד, סלמון, פטרייה'],['💊 מגנזיום','אגוזים, זרעים, או תוסף בערב'],['💧 מים','לשתות לאורך היום, לא הכול בבת אחת']]
+        .map(([h,d])=>`<div class="swap"><span style="font-weight:800;flex:0 0 42%">${h}</span><span class="grow muted" style="font-size:13px">${d}</span></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="section-title">שאלות נפוצות</div>
+  <details class="acc"><summary>כמה זמן עד שנכנסים לקטוזיס?</summary><div class="inner">בדרך כלל 2–4 ימים של פחות מ־25 ג׳ פחמימות נטו. "הסתגלות לשומן" מלאה — שבועיים עד ארבעה. אז מגיעים האנרגיה היציבה והירידה בתיאבון.</div></details>
+  <details class="acc"><summary>איך יודעים שאני בקטוזיס?</summary><div class="inner">סימנים נפוצים: ירידה בתיאבון, אנרגיה יציבה, טעם מתכתי קל בפה, וירידה מהירה במים בהתחלה. אפשר (לא חובה) למדוד עם מקלוני שתן או מד־קטונים בדם.</div></details>
+  <details class="acc"><summary>למה המשקל נתקע?</summary><div class="inner">הסיבה #1 היא פחמימות נסתרות (רטבים, "מוצרי קיטו", ירקות עמילניים). בדקו תוויות. גם עודף חלבון או אגוזים, שינה חסרה או לחץ יכולים לעצור. שקלו חלון אכילה (צום לסירוגין) לזירוז.</div></details>
+  <details class="acc"><summary>מה עושים במסעדה?</summary><div class="inner"><ul><li>מנה על בסיס בשר/דג + שמן זית</li><li>סלט ירוק עם אבוקדו במקום צ׳יפס/פחמימה</li><li>בלי לחמנייה, בלי רטבים מתוקים</li><li>קינוח? קוביית שוקולד מריר או פשוט קפה</li></ul></div></details>
+  <details class="acc"><summary>ואם אכלתי פחמימות בטעות?</summary><div class="inner">לא נורא ולא נצחי. פשוט חוזרים לקטו בארוחה הבאה — שומן+חלבון+ירקות עליים. הליכה קצרה עוזרת לנצל את הסוכר. יום אחד לא מוחק שבועות של עבודה.</div></details>
+
+  <div class="note-box" style="margin-top:14px">⚕️ <span>דיאטה קטוגנית אינה מתאימה לכולם (למשל הריון, סוכרת עם אינסולין, בעיות כליה/כבד, לבלב). ירידה של 40 ק״ג היא יעד גדול — התחילי בליווי רופא/ה ותזונאי/ת, במיוחד אם יש מצב רפואי או תרופות.</span></div>
+  `;
+};
+function menuCard(){
+  const mn=todayMenu();
+  return `<div class="card" id="menuCard">
+    <div class="row" style="align-items:center;justify-content:space-between;margin-bottom:4px">
+      <b style="font-size:15px">🍽️ תפריט "${mn.name}"</b>
+      <button class="btn ghost sm" id="menuNext" style="padding:8px 12px">תפריט אחר ↻</button>
+    </div>
+    <div style="margin-top:6px">
+      ${mn.meals.map(([t,d])=>`<div class="swap" style="align-items:flex-start"><span style="flex:0 0 34%;font-weight:800;font-size:13.5px">${t}</span><span class="grow" style="font-size:13.5px;color:var(--ink-soft)">${d}</span></div>`).join('')}
+    </div>
+    <div class="row" style="gap:6px;margin-top:12px;text-align:center">
+      <div class="grow" style="background:var(--accent-100);border-radius:10px;padding:7px"><b style="color:#b45b1e">${mn.fat}ג׳</b><div class="muted" style="font-size:10.5px;font-weight:800">שומן</div></div>
+      <div class="grow" style="background:var(--brand-100);border-radius:10px;padding:7px"><b style="color:var(--brand-600)">${mn.prot}ג׳</b><div class="muted" style="font-size:10.5px;font-weight:800">חלבון</div></div>
+      <div class="grow" style="background:var(--bg-soft);border-radius:10px;padding:7px"><b style="color:var(--good)">${mn.carb}ג׳</b><div class="muted" style="font-size:10.5px;font-weight:800">פחמ׳ נטו</div></div>
+      <div class="grow" style="background:var(--bg-soft);border-radius:10px;padding:7px"><b>${mn.kcal}</b><div class="muted" style="font-size:10.5px;font-weight:800">קק״ל</div></div>
+    </div>
+    <p class="muted" style="font-size:11.5px;margin-top:10px">התפריט לדוגמה בלבד — התאימי כמויות ליעד המאקרו האישי שלך.</p>
+  </div>`;
+}
+binders.food=function(){
+  const calc=()=>{
+    const tot=parseFloat($('#ncTotal').value)||0, fib=parseFloat($('#ncFiber').value)||0;
+    const net=Math.max(0,+(tot-fib).toFixed(1));
+    $('#ncVal').textContent=net;
+  };
+  $('#ncTotal').oninput=calc; $('#ncFiber').oninput=calc;
+  $('#menuNext').onclick=()=>{menuShift++;render();};
+};
+
+/* ============================================================
+   VIEW: Track / weight + chart + roadmap
+   ============================================================ */
+views.track=function(){
+  return `
+  <div class="card">
+    <h2>⚖️ שקילה שבועית</h2>
+    <p class="muted" style="font-size:12.5px;margin-bottom:10px">הכי טוב לשקול פעם בשבוע, אותו יום, בבוקר. עקביות חשובה מהמספר עצמו.</p>
+    <div class="row">
+      <input class="input grow" id="wKg" type="number" inputmode="decimal" step="0.1" placeholder="משקל בק״ג (${currentWeight()})">
+      <button class="btn sm" id="wSave" style="flex:0 0 auto">שמירה</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:baseline">
+      <h2>מגמת המשקל</h2>
+      <span class="pill ${lostKg()>0?'brand':''}">${lostKg()>0?'−'+lostKg()+' ק״ג':'טרם'}</span>
+    </div>
+    ${weightChart()}
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><span class="lbl">התחלה</span><b>${S.profile.startWeight}</b><span class="muted" style="font-size:12px">ק״ג</span></div>
+    <div class="tile"><span class="lbl">יעד</span><b>${goalWeight()}</b><span class="muted" style="font-size:12px">ק״ג</span></div>
+    <div class="tile"><span class="lbl">נשאר</span><b>${Math.max(0,+(currentWeight()-goalWeight()).toFixed(1))}</b><span class="muted" style="font-size:12px">ק״ג ליעד</span></div>
+    <div class="tile"><span class="lbl">ימי רצף</span><b>🔥 ${S.streak}</b><span class="muted" style="font-size:12px">ברציפות</span></div>
+  </div>
+
+  <div class="section-title">מעקב קטונים</div>
+  ${ketoneCard()}
+
+  <div class="section-title">מד היקפים</div>
+  ${measuresCard()}
+
+  <div class="section-title">מפת המסע · 12 חודשים</div>
+  <div class="card road">
+    ${ROADMAP.map(m=>{
+      const done=lostKg()>=m.kg;
+      const now=!done && ROADMAP.filter(x=>x.kg<m.kg).every(x=>lostKg()>=x.kg);
+      return `<div class="milestone ${done?'done':now?'now':''}">
+        <div class="dot">${done?'✓':m.m}</div>
+        <div class="body"><h3>${m.title}</h3><span class="kg">אבן דרך: −${m.kg} ק״ג</span><p>${m.p}</p></div>
+      </div>`;}).join('')}
+  </div>
+
+  <div class="card tight">
+    <div class="row" style="gap:8px">
+      <button class="btn ghost grow sm" id="exportBtn">⬇️ גיבוי הנתונים</button>
+      <button class="btn danger grow sm" id="resetBtn">איפוס מלא</button>
+    </div>
+  </div>
+  `;
+};
+binders.track=function(){
+  $('#wSave').onclick=()=>{
+    const v=parseFloat($('#wKg').value);
+    if(!v||v<30||v>400){toast('הזן/י משקל תקין');return;}
+    const d=todayISO();
+    const ex=S.weights.find(w=>w.date===d);
+    if(ex)ex.kg=v;else S.weights.push({date:d,kg:v});
+    S.weights.sort((a,b)=>a.date.localeCompare(b.date));
+    save();
+    const gained=v>currentWeightPrev(v);
+    toast(lostKg()>0?`יופי! ירדת ${lostKg()} ק״ג בסך הכול 🎉`:'נרשם. ממשיכים במסע 💪');
+    render();
+  };
+  $('#exportBtn').onclick=()=>{
+    const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='mentor-backup-'+todayISO()+'.json';a.click();toast('קובץ גיבוי הורד');
+  };
+  $('#resetBtn').onclick=()=>{
+    if(confirm('לאפס את כל הנתונים ולהתחיל מחדש? פעולה זו אינה הפיכה.')){
+      localStorage.removeItem(KEY);S=structuredClone(DEFAULT);TAB='home';render();
+    }
+  };
+  // מעקב קטונים
+  document.querySelectorAll('#ketMode button').forEach(b=>b.onclick=()=>{ketoneMode=b.dataset.mode;render();});
+  const ks=$('#ketSave'); if(ks)ks.onclick=()=>{
+    const v=parseFloat($('#ketVal').value);
+    if(!(v>=0)||v>15){toast('הזן/י ערך תקין (0–15)');return;}
+    saveKetone('blood',v);
+  };
+  document.querySelectorAll('#ketUrine button').forEach(b=>b.onclick=()=>saveKetone('urine',b.dataset.lvl));
+  // מד היקפים
+  const msave=$('#measSave'); if(msave)msave.onclick=()=>{
+    const vals={};
+    document.querySelectorAll('.measIn').forEach(inp=>{
+      const v=parseFloat(inp.value);
+      if(v>0&&v<250)vals[inp.dataset.part]=v;
+    });
+    if(!Object.keys(vals).length){toast('הזן/י לפחות היקף אחד');return;}
+    const d=todayISO(), ex=S.measures.find(m=>m.date===d);
+    if(ex)Object.assign(ex.vals,vals);else S.measures.push({date:d,vals});
+    S.measures.sort((a,b)=>a.date.localeCompare(b.date));
+    save();toast('היקפים נשמרו 📏');render();
+  };
+};
+function saveKetone(type,value){
+  const d=todayISO();
+  S.ketones=S.ketones.filter(k=>k.date!==d);
+  S.ketones.push({date:d,type,value});
+  S.ketones.sort((a,b)=>a.date.localeCompare(b.date));
+  save();
+  toast('קטונים נשמרו · '+(type==='blood'?ketosisLabel(value)[0]:'בדיקת שתן'));
+  render();
+}
+function ketoneCard(){
+  const last=S.ketones[S.ketones.length-1];
+  const urine=[['שלילי','#cbd5cf'],['עקבות','#e6d5a8'],['נמוך','#e0a9c8'],['בינוני','#c77fb0'],['גבוה','#8e4d86']];
+  let head='';
+  if(last){
+    if(last.type==='blood'){const[lbl,col]=ketosisLabel(last.value);
+      head=`<div style="text-align:center;margin-bottom:12px"><b style="font-size:30px;color:${col}">${last.value}</b><span class="muted" style="font-weight:800"> mmol/L</span><div style="color:${col};font-weight:800;font-size:13px">${lbl}</div></div>`;
+    }else head=`<div style="text-align:center;margin-bottom:12px"><b style="font-size:22px;color:var(--brand-600)">${last.value}</b><div class="muted" style="font-size:12px;font-weight:700">בדיקת שתן אחרונה</div></div>`;
+  }
+  return `<div class="card">
+    <p class="muted" style="font-size:12.5px;margin-bottom:10px">מדידה היא רשות — ההרגשה היא המדד הטוב ביותר. קטוזיס תזונתי בדם: <b>0.5–3.0 mmol/L</b>.</p>
+    ${head}
+    <div class="seg" id="ketMode" style="margin-bottom:12px">
+      <button data-mode="blood" class="${ketoneMode==='blood'?'on':''}">🩸 דם<small>mmol/L</small></button>
+      <button data-mode="urine" class="${ketoneMode==='urine'?'on':''}">🧪 שתן<small>מקלון</small></button>
+    </div>
+    ${ketoneMode==='blood'
+      ? `<div class="row"><input class="input grow" id="ketVal" type="number" inputmode="decimal" step="0.1" placeholder="לדוגמה 1.5"><button class="btn sm" id="ketSave" style="flex:0 0 auto">שמירה</button></div>`
+      : `<div class="seg" id="ketUrine">${urine.map(([l,c])=>`<button data-lvl="${l}" style="min-width:calc(33% - 6px)"><span style="display:inline-block;width:11px;height:11px;border-radius:3px;background:${c};vertical-align:-1px;margin-inline-end:5px"></span>${l}</button>`).join('')}</div>`}
+    ${S.ketones.length?`<div style="margin-top:14px">${S.ketones.slice(-6).reverse().map(k=>{
+        const dd=new Date(k.date).toLocaleDateString('he-IL',{day:'numeric',month:'short'});
+        const val=k.type==='blood'?`${k.value} mmol · ${ketosisLabel(k.value)[0]}`:`שתן: ${k.value}`;
+        const col=k.type==='blood'?ketosisLabel(k.value)[1]:'var(--ink-soft)';
+        return `<div class="swap"><span class="muted" style="flex:0 0 30%">${dd}</span><span class="grow" style="font-weight:700;color:${col};font-size:13px">${val}</span></div>`;
+      }).join('')}</div>`:''}
+  </div>`;
+}
+function measuresCard(){
+  const rows=MEASURES.map(([id,he,emo])=>{
+    const last=measureLatest(id), first=measureFirst(id);
+    const delta=(last!=null&&first!=null)?+(last-first).toFixed(1):null;
+    const badge=delta!=null&&delta!==0?`<span class="delta ${delta<0?'up':'down'}" style="font-size:12px">${delta<0?'−':'+'}${Math.abs(delta)} ס״מ</span>`:'';
+    return `<div class="row" style="align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)">
+      <span style="flex:0 0 33%;font-weight:800;font-size:13.5px">${emo} ${he}</span>
+      <span class="grow muted" style="font-size:13px">${last!=null?`נוכחי: <b style="color:var(--ink)">${last}</b> ס״מ`:'—'} ${badge}</span>
+      <input class="input measIn" data-part="${id}" type="number" inputmode="decimal" step="0.1" placeholder="${last!=null?last:'ס״מ'}" style="flex:0 0 84px;padding:9px 10px;text-align:center">
+    </div>`;
+  }).join('');
+  return `<div class="card">
+    <p class="muted" style="font-size:12.5px;margin-bottom:6px">היקפים לפעמים יורדים גם כשהמשקל תקוע — מדד מצוין להתקדמות. מודדים פעם בשבוע, אותו יום.</p>
+    ${rows}
+    <button class="btn sm" id="measSave" style="margin-top:12px;width:100%">שמירת מדידה</button>
+  </div>`;
+}
+function currentWeightPrev(exclude){
+  const arr=S.weights.filter(w=>w.kg!==exclude);
+  return arr.length?arr[arr.length-1].kg:S.profile.startWeight;
+}
+function weightChart(){
+  const pts=[{date:S.profile.startDate,kg:S.profile.startWeight},...S.weights];
+  if(pts.length<2)return `<p class="muted center" style="padding:24px 0;font-size:13px">רשמו שקילה נוספת כדי לראות את הגרף מתחיל להיווצר 📉</p>`;
+  const W=440,H=170,pad=28;
+  const kgs=pts.map(p=>p.kg).concat([goalWeight()]);
+  const min=Math.min(...kgs)-1,max=Math.max(...kgs)+1;
+  const xs=pts.map((p,i)=>pad+(i/(pts.length-1))*(W-pad*1.4));
+  const y=kg=>pad+ (1-(kg-min)/(max-min))*(H-pad*1.7);
+  const line=pts.map((p,i)=>`${i?'L':'M'}${xs[i].toFixed(1)},${y(p.kg).toFixed(1)}`).join(' ');
+  const area=`${line} L${xs[xs.length-1].toFixed(1)},${H-pad} L${xs[0].toFixed(1)},${H-pad} Z`;
+  const gY=y(goalWeight());
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;margin-top:6px" preserveAspectRatio="none">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f7a5c" stop-opacity=".22"/><stop offset="1" stop-color="#0f7a5c" stop-opacity="0"/></linearGradient></defs>
+    <line x1="${pad}" y1="${gY}" x2="${W-pad*.4}" y2="${gY}" stroke="#caa54a" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="${W-pad*.4}" y="${gY-5}" text-anchor="end" font-size="10" fill="#caa54a" font-weight="700">יעד ${goalWeight()}</text>
+    <path d="${area}" fill="url(#g)"/>
+    <path d="${line}" fill="none" stroke="#0f7a5c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts.map((p,i)=>`<circle cx="${xs[i].toFixed(1)}" cy="${y(p.kg).toFixed(1)}" r="${i===pts.length-1?4.5:3}" fill="#fff" stroke="#0f7a5c" stroke-width="2.5"/>`).join('')}
+    <text x="${xs[xs.length-1].toFixed(1)}" y="${(y(pts[pts.length-1].kg)-9).toFixed(1)}" text-anchor="middle" font-size="11" fill="#0f7a5c" font-weight="800">${pts[pts.length-1].kg}</text>
+  </svg>`;
+}
+
+/* ============================================================
+   Onboarding
+   ============================================================ */
+let OB={step:0,data:{...DEFAULT.profile}};
+function onboardingView(){
+  const steps=[obWelcome,obAbout,obBody,obGoal,obReady];
+  return `<div class="hero">
+    ${OB.step>0?'':''}
+    </div>${steps[OB.step]()}`;
+}
+function stepsDots(n){return `<div class="steps">${[0,1,2,3,4].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</div>`;}
+
+function obWelcome(){
+  return `<div class="hero">
+    <div class="big-logo">🥑</div>
+    <h1>המנטור שלי · קיטו</h1>
+    <p>מנטור אישי ומומחה לדיאטה קטוגנית.<br>מסע של שנה. יעד: <b style="color:var(--brand-600)">−40 ק״ג</b>. צעד אחר צעד, יחד.</p>
+  </div>
+  ${stepsDots(0)}
+  <div class="view">
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        ${[['🥑','יעד מאקרו קטוגני אישי — שומן, חלבון ופחמימה'],['💬','מנטור מומחה קיטו: שפעת קיטו, אלקטרוליטים, סטול ועוד'],['💪','לוח אימוני התנגדות יומי בבית'],['🔒','הכול נשמר רק אצלך בדפדפן — פרטי לחלוטין']]
+          .map(([e,t])=>`<div class="row" style="align-items:center;gap:12px"><div style="font-size:24px">${e}</div><div style="font-weight:700;font-size:14.5px">${t}</div></div>`).join('')}
+      </div>
+    </div>
+    <button class="btn" id="obNext">בוא/י נתחיל →</button>
+  </div>`;
+}
+function obAbout(){
+  const d=OB.data;
+  return `<div class="hero"><h1>נעים להכיר</h1><p>כמה פרטים כדי להתאים לך את המסע</p></div>${stepsDots(1)}
+  <div class="view">
+    <div class="card">
+      <div class="field"><label>איך לקרוא לך?</label>
+        <input class="input" id="fName" placeholder="השם שלך" value="${esc(d.name)}"></div>
+      <div class="field"><label>מין (לחישוב מטבולי מדויק)</label>
+        <div class="seg" id="fSex">
+          <button data-v="female" class="${d.sex==='female'?'on':''}">אישה</button>
+          <button data-v="male" class="${d.sex==='male'?'on':''}">גבר</button>
+        </div></div>
+      <div class="field"><label>גיל</label>
+        <input class="input" id="fAge" type="number" inputmode="numeric" value="${d.age}"></div>
+    </div>
+    <div class="row"><button class="btn ghost sm" id="obBack" style="flex:0 0 auto">→</button><button class="btn grow" id="obNext">המשך</button></div>
+  </div>`;
+}
+function obBody(){
+  const d=OB.data;
+  const acts=[['1.2','יושבני','מעט מאוד תנועה'],['1.375','קל','1–3 אימונים בשבוע'],['1.55','בינוני','3–5 אימונים'],['1.725','פעיל','6–7 אימונים']];
+  return `<div class="hero"><h1>נקודת ההתחלה</h1><p>מאיפה יוצאים למסע</p></div>${stepsDots(2)}
+  <div class="view">
+    <div class="card">
+      <div class="field"><label>גובה (ס״מ)</label>
+        <input class="input" id="fHeight" type="number" inputmode="numeric" value="${d.height}"></div>
+      <div class="field"><label>משקל נוכחי (ק״ג)</label>
+        <input class="input" id="fWeight" type="number" inputmode="decimal" step="0.1" placeholder="לדוגמה 110" value="${d.startWeight||''}"></div>
+      <div class="field"><label>רמת פעילות</label>
+        <div class="seg" id="fAct">
+          ${acts.map(([v,l,s])=>`<button data-v="${v}" class="${d.activity==+v?'on':''}">${l}<small>${s}</small></button>`).join('')}
+        </div></div>
+    </div>
+    <div class="row"><button class="btn ghost sm" id="obBack" style="flex:0 0 auto">→</button><button class="btn grow" id="obNext">המשך</button></div>
+  </div>`;
+}
+function obGoal(){
+  const d=OB.data;
+  return `<div class="hero"><h1>היעד</h1><p>לאן אנחנו הולכים</p></div>${stepsDots(3)}
+  <div class="view">
+    <div class="card center">
+      <p class="muted" style="font-size:13px">כמה ק״ג תרצה/י לרדת במהלך השנה?</p>
+      <div style="font-size:54px;font-weight:900;color:var(--brand-600);letter-spacing:-2px;margin:6px 0" id="goalNum">${d.goalLoss}</div>
+      <div class="muted" style="font-size:13px;margin-bottom:6px">ק״ג</div>
+      <input type="range" id="fGoal" min="5" max="60" step="1" value="${d.goalLoss}" style="width:100%;accent-color:var(--brand)">
+      <div id="goalCalc" class="note-box" style="margin-top:14px;text-align:start"></div>
+    </div>
+    <div class="row"><button class="btn ghost sm" id="obBack" style="flex:0 0 auto">→</button><button class="btn grow" id="obNext">המשך</button></div>
+  </div>`;
+}
+function obReady(){
+  const d=OB.data;
+  S.profile={...d};
+  const cal=(function(){const w=d.startWeight||90;const b=10*w+6.25*d.height-5*d.age+(d.sex==='male'?5:-161);
+    const t=b*d.activity;const floor=d.sex==='male'?1500:1200;return Math.max(floor,Math.round((t-650)/10)*10);})();
+  const prot=Math.max(80,Math.round((d.startWeight||90)*1.2)), carb=25;
+  const fat=Math.max(40,Math.round((cal-carb*4-prot*4)/9));
+  return `<div class="hero"><div class="big-logo">🥑</div><h1>הכול מוכן${d.name?', '+esc(d.name):''}!</h1>
+    <p>בנינו לך תכנית קטוגנית אישית ובטוחה. הנה התמונה:</p></div>${stepsDots(4)}
+  <div class="view">
+    <div class="tiles">
+      <div class="tile"><span class="lbl">משקל התחלה</span><b>${d.startWeight||'—'}</b><span class="muted" style="font-size:12px">ק״ג</span></div>
+      <div class="tile"><span class="lbl">משקל יעד</span><b>${(d.startWeight-d.goalLoss).toFixed(1)}</b><span class="muted" style="font-size:12px">ק״ג</span></div>
+      <div class="tile"><span class="lbl">יעד קלורי</span><b>${cal}</b><span class="muted" style="font-size:12px">קק״ל/יום</span></div>
+      <div class="tile"><span class="lbl">קצב בריא</span><b>~0.75</b><span class="muted" style="font-size:12px">ק״ג/שבוע</span></div>
+    </div>
+    <div class="card"><b style="font-size:14px">🥑 יעד המאקרו הקטוגני היומי</b>
+      <div class="row" style="gap:8px;text-align:center;margin-top:10px">
+        <div class="grow" style="background:var(--accent-100);border-radius:11px;padding:9px"><b style="font-size:19px;color:#b45b1e">${fat}ג׳</b><div class="muted" style="font-size:11px;font-weight:800">🧈 שומן</div></div>
+        <div class="grow" style="background:var(--brand-100);border-radius:11px;padding:9px"><b style="font-size:19px;color:var(--brand-600)">${prot}ג׳</b><div class="muted" style="font-size:11px;font-weight:800">🍗 חלבון</div></div>
+        <div class="grow" style="background:var(--bg-soft);border-radius:11px;padding:9px"><b style="font-size:19px;color:var(--good)">${carb}ג׳</b><div class="muted" style="font-size:11px;font-weight:800">🥦 פחמ׳ נטו</div></div>
+      </div></div>
+    <div class="note-box" style="margin:4px 0 14px">⚕️ <span>היעד שלך שאפתני ומכובד. דיאטה קטוגנית אינה מתאימה לכל אחד — התחילי בליווי רופא/ה ותזונאי/ת, במיוחד אם יש מצב רפואי או תרופות. אני כאן ללוות אותך בכל יום.</span></div>
+    <button class="btn" id="obFinish">יוצאים לדרך 🥑</button>
+  </div>`;
+}
+function bindOnboarding(){
+  const d=OB.data;
+  const nextBtn=$('#obNext'),backBtn=$('#obBack'),finBtn=$('#obFinish');
+  if(backBtn)backBtn.onclick=()=>{collectStep();OB.step--;render2ob();};
+  if(nextBtn)nextBtn.onclick=()=>{if(!collectStep())return;OB.step++;render2ob();};
+  if(finBtn)finBtn.onclick=()=>{
+    S.profile={...OB.data};
+    S.profile.startDate=todayISO();
+    S.targets.calories=calorieTarget();
+    S.weights=[{date:todayISO(),kg:S.profile.startWeight}];
+    S.onboarded=true;save();TAB='home';render();
+    toast('ברוך/ה הבא/ה למסע שלך! 🌿');
+  };
+  // step-specific bindings
+  if(OB.step===1){
+    document.querySelectorAll('#fSex button').forEach(b=>b.onclick=()=>{d.sex=b.dataset.v;
+      document.querySelectorAll('#fSex button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+  }
+  if(OB.step===2){
+    document.querySelectorAll('#fAct button').forEach(b=>b.onclick=()=>{d.activity=+b.dataset.v;
+      document.querySelectorAll('#fAct button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+  }
+  if(OB.step===3){
+    const sl=$('#fGoal');const upd=()=>{d.goalLoss=+sl.value;$('#goalNum').textContent=sl.value;paintGoalCalc();};
+    sl.oninput=upd;paintGoalCalc();
+  }
+}
+function paintGoalCalc(){
+  const d=OB.data;const box=$('#goalCalc');if(!box)return;
+  const start=d.startWeight||0;
+  const target=start?(start-d.goalLoss).toFixed(1):'—';
+  const wks=Math.ceil(d.goalLoss/0.75);
+  box.innerHTML=`🎯 מ־<b>${start||'?'}</b> ל־<b>${target}</b> ק״ג · בקצב בריא של כ־0.75 ק״ג לשבוע זה כ־<b>${wks} שבועות</b> (${Math.round(wks/4.3)} חודשים בערך).`;
+}
+function collectStep(){
+  const d=OB.data;
+  if(OB.step===1){
+    d.name=($('#fName')?.value||'').trim();
+    d.age=Math.max(14,Math.min(100,+($('#fAge')?.value||d.age)));
+  }
+  if(OB.step===2){
+    d.height=Math.max(120,Math.min(230,+($('#fHeight')?.value||d.height)));
+    const w=parseFloat($('#fWeight')?.value);
+    if(!w||w<30||w>400){toast('הזן/י משקל נוכחי תקין כדי להמשיך');return false;}
+    d.startWeight=w;
+  }
+  return true;
+}
+function render2ob(){$('#app').innerHTML=onboardingView();bindOnboarding();window.scrollTo({top:0});}
+
+/* ============================================================
+   Boot
+   ============================================================ */
+render();
+if(S.reminders&&S.reminders.enabled)startReminderLoop();
+</script>
+</body>
+</html>
