@@ -264,6 +264,7 @@ const DEFAULT={
   targets:{calories:0,water:8,carbs:25}, // carbs = פחמימות נטו ליום (קיטו)
   training:{sets:3,reps:10,levels:{}}, // רמת כל תרגיל + סבבים/חזרות
   weights:[],          // {date, kg}
+  ketones:[],          // {date, type:'blood'|'urine', value}
   days:{},             // date -> {habits:{}, water:int, mood:'', journal:''}
   chat:[],             // {who:'me'|'bot', text, t}
   streak:0, lastActive:''
@@ -398,7 +399,54 @@ const EXERCISES=[
     basis:'צעד קדימה, ברך אחורית כמעט נוגעת, מתחלפים.',
     kashe:'פסיעות בהליכה קדימה, או עם משקל בידיים.'}},
 ];
+/* ---- תפריטי קיטו לדוגמה (יום שלם) ---- */
+const MENUS=[
+  {name:'קלאסי', kcal:1850, fat:150, prot:105, carb:22, meals:[
+    ['🍳 בוקר','אומלט 3 ביצים בחמאה + חצי אבוקדו + תרד מוקפץ'],
+    ['🥗 צהריים','חזה עוף בשמן זית + סלט ירוק גדול עם טחינה'],
+    ['🥩 ערב','סטייק אנטריקוט + ברוקולי מוקפץ בחמאה'],
+    ['🥜 נשנוש','חופן אגוזי מקדמיה + 4 זיתים']]},
+  {name:'ים־תיכוני', kcal:1780, fat:145, prot:100, carb:20, meals:[
+    ['🥑 בוקר','יוגורט שומן מלא 5% + אגוזי מלך + זרעי צ׳יה'],
+    ['🐟 צהריים','סלמון אפוי + סלט מלפפון־עגבנייה קטן בשמן זית'],
+    ['🧀 ערב','שקשוקה 2 ביצים עם גבינה בולגרית ואבוקדו'],
+    ['🫒 נשנוש','גבינה צהובה + זיתים']]},
+  {name:'צמחוני', kcal:1720, fat:148, prot:70, carb:24, meals:[
+    ['🥥 בוקר','פודינג צ׳יה בחלב קוקוס + אגוזים + קינמון'],
+    ['🥗 צהריים','סלט אבוקדו־ביצה גדול + גבינת פטה + שמן זית'],
+    ['🍄 ערב','טופו מוקפץ בשמן שומשום + קישוא ופטריות'],
+    ['🥑 נשנוש','חצי אבוקדו עם מלח ולימון']]},
+  {name:'מהיר ופשוט', kcal:1800, fat:150, prot:95, carb:18, meals:[
+    ['🍳 בוקר','2 ביצים קשות + אבוקדו + קפה עם שמנת מתוקה'],
+    ['🥫 צהריים','טונה בשמן זית על מיטת חסה + מיונז'],
+    ['🍗 ערב','שוקי עוף בתנור + כרובית אפויה בחמאה'],
+    ['🧀 נשנוש','מקלוני גבינת פרמזן']]},
+  {name:'צום 16:8', kcal:1750, fat:140, prot:100, carb:20, meals:[
+    ['☕ בוקר','קפה שחור / מים עם מלח (חלון צום)'],
+    ['🍽️ 13:00','המבורגר בקר בלי לחם + ביצת עין + סלט'],
+    ['🥩 19:00','דג לבן בחמאת שום + אספרגוס מוקפץ'],
+    ['🥜 בין הארוחות','חופן שקדים אם רעבים']]},
+  {name:'חורפי מנחם', kcal:1820, fat:150, prot:98, carb:23, meals:[
+    ['🍳 בוקר','ביצים מקושקשות בחמאה + נקניקיית איכות'],
+    ['🍲 צהריים','מרק עוף שמן עם ירקות דלי־פחמימה'],
+    ['🥩 ערב','תבשיל בקר בשמן זית + כרובית מעוכה בחמאה'],
+    ['🍫 נשנוש','2 קוביות שוקולד מריר 90%']]},
+];
+/* ---- פחמימות נטו לפרוסה/מנה נפוצה (גרם, בקירוב) ---- */
+const NETCARB=[
+  ['🥑 אבוקדו (חצי)',1],['🥚 ביצה',0.5],['🥦 ברוקולי (כוס)',4],['🥬 תרד (כוס)',0.4],
+  ['🧀 גבינה צהובה (30ג׳)',0.4],['🥒 מלפפון (חצי)',2],['🍅 עגבנייה (בינונית)',3],
+  ['🥜 שקדים (30ג׳)',2.5],['🌰 אגוזי מלך (30ג׳)',2],['🫒 זיתים (10)',1],
+  ['🥥 חלב קוקוס (100מ״ל)',3],['🍓 תות (5)',3],['🧅 בצל (רבע)',2],['🥕 גזר (בינוני)',5],
+];
 function trainDay(){const d=today();if(!d.workout)d.workout={};return d.workout;}
+function todayMenu(){return MENUS[(daysIn()+ (typeof menuShift==='number'?menuShift:0))%MENUS.length];}
+function ketosisLabel(v){ // mmol/L → פרשנות
+  if(v<0.5)return['מתחת לקטוזיס','var(--muted)'];
+  if(v<1.0)return['קטוזיס קל','var(--warn)'];
+  if(v<=3.0)return['קטוזיס תזונתי אופטימלי ✓','var(--good)'];
+  return['קטוזיס גבוה','var(--accent)'];
+}
 function exLevel(id){return (S.training.levels&&S.training.levels[id])||'kal';}
 function workoutDoneOn(date){const w=(S.days[date]&&S.days[date].workout)||{};return EXERCISES.every(e=>w[e.id]);}
 function workoutCount(date){const w=(S.days[date]&&S.days[date].workout)||{};return EXERCISES.filter(e=>w[e.id]).length;}
@@ -408,6 +456,8 @@ function trainedIn(days){let c=0;for(let i=0;i<days;i++){const d=new Date(Date.n
    Router
    ============================================================ */
 let TAB='home';
+let menuShift=0; // לגלילה בין תפריטי הדוגמה
+let ketoneMode='blood'; // מצב מדידת קטונים: דם / שתן
 function render(){
   const app=$('#app');
   if(!S.onboarded){app.innerHTML=onboardingView();bindOnboarding();return;}
@@ -827,6 +877,25 @@ views.food=function(){
       .map(([f,t])=>`<div class="swap"><span class="from">${f}</span><span class="arw">←</span><span class="to">${t}</span></div>`).join('')}
   </div>
 
+  <div class="section-title">תפריט קיטו לדוגמה</div>
+  ${menuCard()}
+
+  <div class="section-title">מחשבון פחמימות נטו</div>
+  <div class="card">
+    <p class="muted" style="font-size:12.5px;margin-bottom:10px">פחמימות נטו = סה״כ פחמימות − סיבים תזונתיים. זה מה שסופרים בקיטו.</p>
+    <div class="row" style="gap:8px">
+      <div class="grow"><label style="font-size:12px;font-weight:800;display:block;margin-bottom:5px">סה״כ פחמ׳ (ג׳)</label>
+        <input class="input" id="ncTotal" type="number" inputmode="decimal" step="0.1" placeholder="0"></div>
+      <div class="grow"><label style="font-size:12px;font-weight:800;display:block;margin-bottom:5px">סיבים (ג׳)</label>
+        <input class="input" id="ncFiber" type="number" inputmode="decimal" step="0.1" placeholder="0"></div>
+    </div>
+    <div id="ncResult" style="margin-top:12px;text-align:center;background:var(--brand-100);border-radius:13px;padding:14px">
+      <b style="font-size:28px;color:var(--brand-600)" id="ncVal">0</b>
+      <span class="muted" style="font-weight:800"> ג׳ פחמימות נטו</span></div>
+    <details class="acc" style="margin-top:12px"><summary>טבלת פחמימות נטו למאכלים נפוצים</summary>
+      <div class="inner">${NETCARB.map(([f,g])=>`<div class="swap"><span class="grow">${f}</span><span style="font-weight:900;color:${g<=3?'var(--good)':'var(--warn)'}">${g} ג׳</span></div>`).join('')}</div></details>
+  </div>
+
   <div class="section-title">שפעת הקיטו & אלקטרוליטים</div>
   <div class="card">
     <p style="font-size:13.5px">בימים הראשונים ייתכנו עייפות, כאב ראש או עצבנות — זו "שפעת הקיטו", והיא כמעט תמיד <b>מחסור באלקטרוליטים ומים</b>, לא סימן להיכשל. הפתרון פשוט:</p>
@@ -845,6 +914,34 @@ views.food=function(){
 
   <div class="note-box" style="margin-top:14px">⚕️ <span>דיאטה קטוגנית אינה מתאימה לכולם (למשל הריון, סוכרת עם אינסולין, בעיות כליה/כבד, לבלב). ירידה של 40 ק״ג היא יעד גדול — התחילי בליווי רופא/ה ותזונאי/ת, במיוחד אם יש מצב רפואי או תרופות.</span></div>
   `;
+};
+function menuCard(){
+  const mn=todayMenu();
+  return `<div class="card" id="menuCard">
+    <div class="row" style="align-items:center;justify-content:space-between;margin-bottom:4px">
+      <b style="font-size:15px">🍽️ תפריט "${mn.name}"</b>
+      <button class="btn ghost sm" id="menuNext" style="padding:8px 12px">תפריט אחר ↻</button>
+    </div>
+    <div style="margin-top:6px">
+      ${mn.meals.map(([t,d])=>`<div class="swap" style="align-items:flex-start"><span style="flex:0 0 34%;font-weight:800;font-size:13.5px">${t}</span><span class="grow" style="font-size:13.5px;color:var(--ink-soft)">${d}</span></div>`).join('')}
+    </div>
+    <div class="row" style="gap:6px;margin-top:12px;text-align:center">
+      <div class="grow" style="background:var(--accent-100);border-radius:10px;padding:7px"><b style="color:#b45b1e">${mn.fat}ג׳</b><div class="muted" style="font-size:10.5px;font-weight:800">שומן</div></div>
+      <div class="grow" style="background:var(--brand-100);border-radius:10px;padding:7px"><b style="color:var(--brand-600)">${mn.prot}ג׳</b><div class="muted" style="font-size:10.5px;font-weight:800">חלבון</div></div>
+      <div class="grow" style="background:var(--bg-soft);border-radius:10px;padding:7px"><b style="color:var(--good)">${mn.carb}ג׳</b><div class="muted" style="font-size:10.5px;font-weight:800">פחמ׳ נטו</div></div>
+      <div class="grow" style="background:var(--bg-soft);border-radius:10px;padding:7px"><b>${mn.kcal}</b><div class="muted" style="font-size:10.5px;font-weight:800">קק״ל</div></div>
+    </div>
+    <p class="muted" style="font-size:11.5px;margin-top:10px">התפריט לדוגמה בלבד — התאימי כמויות ליעד המאקרו האישי שלך.</p>
+  </div>`;
+}
+binders.food=function(){
+  const calc=()=>{
+    const tot=parseFloat($('#ncTotal').value)||0, fib=parseFloat($('#ncFiber').value)||0;
+    const net=Math.max(0,+(tot-fib).toFixed(1));
+    $('#ncVal').textContent=net;
+  };
+  $('#ncTotal').oninput=calc; $('#ncFiber').oninput=calc;
+  $('#menuNext').onclick=()=>{menuShift++;render();};
 };
 
 /* ============================================================
@@ -875,6 +972,9 @@ views.track=function(){
     <div class="tile"><span class="lbl">נשאר</span><b>${Math.max(0,+(currentWeight()-goalWeight()).toFixed(1))}</b><span class="muted" style="font-size:12px">ק״ג ליעד</span></div>
     <div class="tile"><span class="lbl">ימי רצף</span><b>🔥 ${S.streak}</b><span class="muted" style="font-size:12px">ברציפות</span></div>
   </div>
+
+  <div class="section-title">מעקב קטונים</div>
+  ${ketoneCard()}
 
   <div class="section-title">מפת המסע · 12 חודשים</div>
   <div class="card road">
@@ -918,7 +1018,51 @@ binders.track=function(){
       localStorage.removeItem(KEY);S=structuredClone(DEFAULT);TAB='home';render();
     }
   };
+  // מעקב קטונים
+  document.querySelectorAll('#ketMode button').forEach(b=>b.onclick=()=>{ketoneMode=b.dataset.mode;render();});
+  const ks=$('#ketSave'); if(ks)ks.onclick=()=>{
+    const v=parseFloat($('#ketVal').value);
+    if(!(v>=0)||v>15){toast('הזן/י ערך תקין (0–15)');return;}
+    saveKetone('blood',v);
+  };
+  document.querySelectorAll('#ketUrine button').forEach(b=>b.onclick=()=>saveKetone('urine',b.dataset.lvl));
 };
+function saveKetone(type,value){
+  const d=todayISO();
+  S.ketones=S.ketones.filter(k=>k.date!==d);
+  S.ketones.push({date:d,type,value});
+  S.ketones.sort((a,b)=>a.date.localeCompare(b.date));
+  save();
+  toast('קטונים נשמרו · '+(type==='blood'?ketosisLabel(value)[0]:'בדיקת שתן'));
+  render();
+}
+function ketoneCard(){
+  const last=S.ketones[S.ketones.length-1];
+  const urine=[['שלילי','#cbd5cf'],['עקבות','#e6d5a8'],['נמוך','#e0a9c8'],['בינוני','#c77fb0'],['גבוה','#8e4d86']];
+  let head='';
+  if(last){
+    if(last.type==='blood'){const[lbl,col]=ketosisLabel(last.value);
+      head=`<div style="text-align:center;margin-bottom:12px"><b style="font-size:30px;color:${col}">${last.value}</b><span class="muted" style="font-weight:800"> mmol/L</span><div style="color:${col};font-weight:800;font-size:13px">${lbl}</div></div>`;
+    }else head=`<div style="text-align:center;margin-bottom:12px"><b style="font-size:22px;color:var(--brand-600)">${last.value}</b><div class="muted" style="font-size:12px;font-weight:700">בדיקת שתן אחרונה</div></div>`;
+  }
+  return `<div class="card">
+    <p class="muted" style="font-size:12.5px;margin-bottom:10px">מדידה היא רשות — ההרגשה היא המדד הטוב ביותר. קטוזיס תזונתי בדם: <b>0.5–3.0 mmol/L</b>.</p>
+    ${head}
+    <div class="seg" id="ketMode" style="margin-bottom:12px">
+      <button data-mode="blood" class="${ketoneMode==='blood'?'on':''}">🩸 דם<small>mmol/L</small></button>
+      <button data-mode="urine" class="${ketoneMode==='urine'?'on':''}">🧪 שתן<small>מקלון</small></button>
+    </div>
+    ${ketoneMode==='blood'
+      ? `<div class="row"><input class="input grow" id="ketVal" type="number" inputmode="decimal" step="0.1" placeholder="לדוגמה 1.5"><button class="btn sm" id="ketSave" style="flex:0 0 auto">שמירה</button></div>`
+      : `<div class="seg" id="ketUrine">${urine.map(([l,c])=>`<button data-lvl="${l}" style="min-width:calc(33% - 6px)"><span style="display:inline-block;width:11px;height:11px;border-radius:3px;background:${c};vertical-align:-1px;margin-inline-end:5px"></span>${l}</button>`).join('')}</div>`}
+    ${S.ketones.length?`<div style="margin-top:14px">${S.ketones.slice(-6).reverse().map(k=>{
+        const dd=new Date(k.date).toLocaleDateString('he-IL',{day:'numeric',month:'short'});
+        const val=k.type==='blood'?`${k.value} mmol · ${ketosisLabel(k.value)[0]}`:`שתן: ${k.value}`;
+        const col=k.type==='blood'?ketosisLabel(k.value)[1]:'var(--ink-soft)';
+        return `<div class="swap"><span class="muted" style="flex:0 0 30%">${dd}</span><span class="grow" style="font-weight:700;color:${col};font-size:13px">${val}</span></div>`;
+      }).join('')}</div>`:''}
+  </div>`;
+}
 function currentWeightPrev(exclude){
   const arr=S.weights.filter(w=>w.kg!==exclude);
   return arr.length?arr[arr.length-1].kg:S.profile.startWeight;
