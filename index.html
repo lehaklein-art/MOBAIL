@@ -279,12 +279,21 @@ const DEFAULT={
   streak:0, lastActive:''
 };
 
+let storageOK=true;
+try{localStorage.setItem('__probe','1');if(localStorage.getItem('__probe')!=='1')storageOK=false;localStorage.removeItem('__probe');}
+catch(e){storageOK=false;}
 let S=load();
 function load(){
   try{const r=JSON.parse(localStorage.getItem(KEY));return r?{...structuredClone(DEFAULT),...r}:structuredClone(DEFAULT);}
   catch(e){return structuredClone(DEFAULT);}
 }
-function save(){localStorage.setItem(KEY,JSON.stringify(S));}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){storageOK=false;}}
+function storageBanner(){
+  if(storageOK)return '';
+  return `<div style="background:#fbeae8;color:#b23c30;padding:12px 16px;font-size:12.5px;font-weight:700;line-height:1.55;text-align:center">
+    ⚠️ הדפדפן במצב הזה <u>לא שומר</u> את הנתונים שלך.<br>
+    פתחי את הקישור ב־<b>Safari/Chrome רגיל</b> (לא מתוך תצוגה בתוך אפליקציה), והוסיפי "למסך הבית".</div>`;
+}
 function today(){
   const d=todayISO();
   if(!S.days[d])S.days[d]={habits:{},water:0,mood:'',journal:''};
@@ -475,9 +484,10 @@ let aiPanel=false; // הגדרות מנטור AI פתוחות
 let aiBusy=false;  // בקשת AI בתהליך
 function render(){
   const app=$('#app');
-  if(!S.onboarded){app.innerHTML=onboardingView();bindOnboarding();return;}
+  if(!S.onboarded){app.innerHTML=storageBanner()+onboardingView();bindOnboarding();return;}
   touchStreak();
   app.innerHTML=`
+    ${storageBanner()}
     ${header()}
     <div class="view" id="view">${views[TAB]()}</div>
     ${nav()}
@@ -1468,7 +1478,7 @@ function collectStep(){
   }
   return true;
 }
-function render2ob(){$('#app').innerHTML=onboardingView();bindOnboarding();window.scrollTo({top:0});}
+function render2ob(){$('#app').innerHTML=storageBanner()+onboardingView();bindOnboarding();window.scrollTo({top:0});}
 
 /* ============================================================
    Boot
