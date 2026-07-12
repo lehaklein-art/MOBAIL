@@ -262,6 +262,7 @@ const DEFAULT={
   onboarded:false,
   profile:{name:'',sex:'female',age:35,height:165,startWeight:0,goalLoss:40,activity:1.375,startDate:todayISO()},
   targets:{calories:0,water:8},
+  training:{sets:3,reps:10,levels:{}}, // רמת כל תרגיל + סבבים/חזרות
   weights:[],          // {date, kg}
   days:{},             // date -> {habits:{}, water:int, mood:'', journal:''}
   chat:[],             // {who:'me'|'bot', text, t}
@@ -364,6 +365,36 @@ const ROADMAP=[
   {m:12,kg:40,title:'חודש 12 · היעד! −40 ק״ג',p:'לא סיימנו — התחלנו חיים חדשים. עוברים לשלב שימור.'},
 ];
 
+/* ---- אימוני התנגדות · תכנית מבוססת המדריך (5 תרגילים, 3 רמות) ---- */
+const LEVELS=[['kal','קל','נקודת פתיחה','😌'],['basis','בסיס','היעד','🎯'],['kashe','קשה','התקדמות','🔥']];
+const EXERCISES=[
+  {id:'squat', n:1, he:'סקוואט', en:'Squat', emo:'🦵', levels:{
+    kal:'קימה וישיבה מכיסא — שולטים בירידה ובעלייה.',
+    basis:'סקוואט מלא, ירכיים עד גובה הברכיים.',
+    kashe:'מחזיקים משקל בחזה, או ירידה איטית 3 שניות.'}},
+  {id:'bridge', n:2, he:'הרמת אגן', en:'Glute Bridge', emo:'🍑', levels:{
+    kal:'גשר רגיל, שתי רגליים, בלי עצירה.',
+    basis:'עם עצירה ולחיצת ישבן 2 שניות למעלה.',
+    kashe:'גשר על רגל אחת, או משקל על האגן.'}},
+  {id:'pushup', n:3, he:'שכיבות סמיכה', en:'Push-up', emo:'💪', levels:{
+    kal:'בעמידה מול קיר — דוחפים ומתקרבים.',
+    basis:'בזווית מול השיש או משטח נמוך יותר.',
+    kashe:'מהרצפה — קודם על הברכיים, אחר כך מלא.'}},
+  {id:'row', n:4, he:'חתירה', en:'Row', emo:'🚣', levels:{
+    kal:'יד נשענת על כיסא, מושכים משקל קל ביד השנייה.',
+    basis:'כפיפה עם שני בקבוקים, מרפקים אחורה.',
+    kashe:'משקל כבד יותר, או חתירה הפוכה מתחת לשולחן.'}},
+  {id:'lunge', n:5, he:'פסיעות', en:'Lunges', emo:'🚶', levels:{
+    kal:'פסיעה במקום, יד אוחזת בכיסא לתמיכה.',
+    basis:'צעד קדימה, ברך אחורית כמעט נוגעת, מתחלפים.',
+    kashe:'פסיעות בהליכה קדימה, או עם משקל בידיים.'}},
+];
+function trainDay(){const d=today();if(!d.workout)d.workout={};return d.workout;}
+function exLevel(id){return (S.training.levels&&S.training.levels[id])||'kal';}
+function workoutDoneOn(date){const w=(S.days[date]&&S.days[date].workout)||{};return EXERCISES.every(e=>w[e.id]);}
+function workoutCount(date){const w=(S.days[date]&&S.days[date].workout)||{};return EXERCISES.filter(e=>w[e.id]).length;}
+function trainedIn(days){let c=0;for(let i=0;i<days;i++){const d=new Date(Date.now()-i*DAY).toISOString().slice(0,10);if(workoutDoneOn(d))c++;}return c;}
+
 /* ============================================================
    Router
    ============================================================ */
@@ -394,7 +425,7 @@ function header(){
 }
 
 function nav(){
-  const items=[['home','בית','🏠'],['plan','היום','✅'],['mentor','מנטור','💬'],['food','תזונה','🥗'],['track','מעקב','📈']];
+  const items=[['home','בית','🏠'],['plan','היום','✅'],['train','אימון','💪'],['mentor','מנטור','💬'],['food','תזונה','🥗'],['track','מעקב','📈']];
   return `<nav class="nav">${items.map(([id,l,ic])=>
     `<button data-tab="${id}" class="${TAB===id?'on':''}"><span class="ic">${ic}</span>${l}</button>`).join('')}</nav>`;
 }
@@ -440,6 +471,14 @@ views.home=function(){
     <div class="bar water" style="margin-top:10px"><i style="width:${Math.min(100,d.water/S.targets.water*100)}%"></i></div>
   </div>
 
+  <div class="card tight" id="trainCard" style="cursor:pointer">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div><b style="font-size:14.5px">💪 אימון היום</b><div class="muted" style="font-size:12px">${workoutCount(todayISO())}/${EXERCISES.length} תרגילים · 🔥 ${trainedIn(7)} השבוע</div></div>
+      <span class="pill ${workoutDoneOn(todayISO())?'brand':'accent'}">${workoutDoneOn(todayISO())?'הושלם ✓':'לאימון ←'}</span>
+    </div>
+    <div class="bar" style="margin-top:10px"><i style="width:${workoutCount(todayISO())/EXERCISES.length*100}%;background:linear-gradient(90deg,#0c684e,#16a377)"></i></div>
+  </div>
+
   <div class="row wrap">
     <button class="btn accent grow" id="qWeigh">⚖️ רשום שקילה</button>
     <button class="btn ghost grow" id="qPlan">✅ למשימות היום</button>
@@ -456,6 +495,7 @@ binders.home=function(){
   $('#waterMinus').onclick=()=>{d.water=Math.max(0,d.water-1);save();render();};
   $('#qWeigh').onclick=()=>go('track');
   $('#qPlan').onclick=()=>go('plan');
+  $('#trainCard').onclick=()=>go('train');
 };
 function nextMilestoneCard(){
   const done=lostKg();
@@ -514,6 +554,120 @@ binders.plan=function(){
     if(d.mood==='low')toast('גם ימים קשים הם חלק מהמסע. אני כאן 💚');
   });
   $('#saveJournal').onclick=()=>{d.journal=$('#journal').value;save();toast('נשמר ביומן 📝');};
+};
+
+/* ============================================================
+   VIEW: Training — לוח אימוני התנגדות יומי
+   ============================================================ */
+views.train=function(){
+  const w=trainDay();
+  const done=EXERCISES.filter(e=>w[e.id]).length;
+  const t=S.training;
+  const week=trainedIn(7), month=trainedIn(30);
+  // last 7 days dots (today on the right)
+  const dots=[];
+  for(let i=6;i>=0;i--){
+    const dt=new Date(Date.now()-i*DAY).toISOString().slice(0,10);
+    const full=workoutDoneOn(dt), part=workoutCount(dt);
+    dots.push(`<div title="${dt}" style="flex:1;text-align:center">
+      <div style="height:34px;border-radius:9px;display:grid;place-items:center;font-size:15px;
+        background:${full?'var(--good)':part?'var(--accent-100)':'var(--bg-soft)'};
+        color:${full?'#fff':'var(--ink-soft)'};font-weight:800">${full?'✓':part?part:'·'}</div>
+      <div style="font-size:9.5px;color:var(--muted);font-weight:700;margin-top:3px">${['א','ב','ג','ד','ה','ו','ש'][new Date(dt).getDay()]}</div></div>`);
+  }
+  return `
+  <div class="mentor-note" style="background:linear-gradient(135deg,#0c684e,#12946f)">
+    <div class="who"><span class="av">💪</span> אימון היום · מעגל כוח מלא גוף</div>
+    <p>${done===EXERCISES.length?'סיימת את כל המעגל היום — כל הכבוד! 🎉':done?`התקדמת יפה — ${done} מתוך ${EXERCISES.length} תרגילים. אפשר להשלים!`:'מעגל קצר של 5 תרגילים, בבית, בלי ציוד. מספיק 15–20 דקות. יאללה מתחילים!'}</p>
+  </div>
+
+  <div class="card tight">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div><b style="font-size:15px">מבנה האימון</b><div class="muted" style="font-size:12px">כמה סבבים וחזרות מכל תרגיל</div></div>
+      <span class="pill brand">${done}/${EXERCISES.length} הושלמו</span>
+    </div>
+    <div class="row" style="gap:10px;margin-top:12px">
+      <div class="grow" style="text-align:center;background:var(--bg-soft);border-radius:13px;padding:10px">
+        <div class="muted" style="font-size:11.5px;font-weight:800">סבבים</div>
+        <div class="row" style="align-items:center;justify-content:center;gap:12px;margin-top:4px">
+          <button class="btn ghost sm setr" data-k="sets" data-d="-1" style="padding:6px 12px">−</button>
+          <b id="valSets" style="font-size:22px;min-width:22px">${t.sets}</b>
+          <button class="btn ghost sm setr" data-k="sets" data-d="1" style="padding:6px 12px">+</button>
+        </div>
+      </div>
+      <div class="grow" style="text-align:center;background:var(--bg-soft);border-radius:13px;padding:10px">
+        <div class="muted" style="font-size:11.5px;font-weight:800">חזרות</div>
+        <div class="row" style="align-items:center;justify-content:center;gap:12px;margin-top:4px">
+          <button class="btn ghost sm setr" data-k="reps" data-d="-1" style="padding:6px 12px">−</button>
+          <b id="valReps" style="font-size:22px;min-width:28px">${t.reps}</b>
+          <button class="btn ghost sm setr" data-k="reps" data-d="1" style="padding:6px 12px">+</button>
+        </div>
+      </div>
+    </div>
+    <p class="muted" style="font-size:12px;margin-top:10px">מנוחה 30–60 שניות בין סבבים. מומלץ להתחיל מ־2 סבבים ולהתקדם ל־3.</p>
+  </div>
+
+  <div class="section-title">התרגילים · בחר/י רמה לכל תרגיל</div>
+  <div id="exWrap">
+    ${EXERCISES.map(e=>{const lv=exLevel(e.id);const isDone=!!w[e.id];return `
+    <div class="card tight ex ${isDone?'ex-done':''}" data-ex="${e.id}" style="border-color:${isDone?'var(--good)':'var(--line)'}">
+      <div class="row" style="align-items:center;gap:11px">
+        <div style="width:42px;height:42px;flex:0 0 auto;border-radius:12px;background:var(--brand-100);display:grid;place-items:center;font-size:22px">${e.emo}</div>
+        <div class="grow">
+          <b style="font-size:15.5px">${e.n}. ${e.he}</b>
+          <span class="muted" style="font-size:12px;font-weight:700"> · ${e.en}</span>
+        </div>
+        <button class="exdone box" data-ex="${e.id}" style="width:32px;height:32px;flex:0 0 auto;border-radius:10px;border:2px solid ${isDone?'var(--good)':'var(--line)'};background:${isDone?'var(--good)':'transparent'};color:${isDone?'#fff':'transparent'};display:grid;place-items:center;font-size:18px;font-weight:800">✓</button>
+      </div>
+      <div class="seg exlvl" data-ex="${e.id}" style="margin-top:12px">
+        ${LEVELS.map(([k,l,sub,emo])=>`<button data-lv="${k}" class="${lv===k?'on':''}">${emo} ${l}<small>${sub}</small></button>`).join('')}
+      </div>
+      <div class="lvdesc" style="margin-top:10px;background:var(--bg-soft);border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:600;color:var(--ink-soft)">${e.levels[lv]}</div>
+    </div>`;}).join('')}
+  </div>
+
+  <div class="acc" style="margin-top:4px" open><summary>איך עולים רמה?</summary>
+    <div class="inner">כשמסיימים את כל הסבבים והחזרות <b>בקלות ובטכניקה טובה</b> — עולים שלב.<br>אם הטכניקה מתפרקת — יורדים שלב בלי היסוס. אין בזה כישלון, זו בנייה נכונה.</div></div>
+  <div class="note-box" style="margin-top:2px">📈 <span><b>עומס מתקדם:</b> אפשר להתחזק גם בתוך אותה רמה — קודם עוד חזרה או עוד סבב, אחר כך משקל, אחר כך ירידה איטית יותר. כל שבוע קצת יותר ממה שהיה נוח בפעם הקודמת. זה מה ששומר על השריר.</span></div>
+
+  <div class="section-title">עקביות</div>
+  <div class="card">
+    <div class="tiles" style="margin-bottom:14px">
+      <div class="tile"><span class="lbl">השבוע</span><b>${week}</b><span class="muted" style="font-size:12px">אימונים מלאים</span></div>
+      <div class="tile"><span class="lbl">30 יום</span><b>${month}</b><span class="muted" style="font-size:12px">אימונים מלאים</span></div>
+    </div>
+    <div class="row" style="gap:6px">${dots.join('')}</div>
+  </div>
+
+  <div class="note-box" style="margin-top:2px">⚕️ <span>מתחילים בעדינות. אם יש כאב (לא מאמץ רגיל), מגבלה רפואית או פציעה — עצרו והתייעצו עם איש/אשת מקצוע. חימום קצר לפני ומתיחות אחרי עוזרים.</span></div>
+  `;
+};
+binders.train=function(){
+  const w=trainDay();
+  // level selection per exercise
+  document.querySelectorAll('.exlvl').forEach(seg=>{
+    const id=seg.dataset.ex, ex=EXERCISES.find(e=>e.id===id);
+    seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+      const lv=b.dataset.lv;
+      if(!S.training.levels)S.training.levels={};
+      S.training.levels[id]=lv;save();
+      seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+      seg.parentElement.querySelector('.lvdesc').textContent=ex.levels[lv];
+    });
+  });
+  // done toggles
+  document.querySelectorAll('.exdone').forEach(btn=>btn.onclick=()=>{
+    const id=btn.dataset.ex;w[id]=!w[id];save();
+    const all=EXERCISES.every(e=>w[e.id]);
+    if(all){toast('מעגל הושלם! שריר נבנה 💪🔥');}
+    render();
+  });
+  // sets/reps steppers
+  document.querySelectorAll('.setr').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k, d=+b.dataset.d;
+    S.training[k]=Math.max(k==='sets'?1:3,Math.min(k==='sets'?6:30,S.training[k]+d));save();
+    $(k==='sets'?'#valSets':'#valReps').textContent=S.training[k];
+  });
 };
 
 /* ============================================================
